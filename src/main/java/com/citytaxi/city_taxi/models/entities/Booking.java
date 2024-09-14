@@ -1,6 +1,5 @@
 package com.citytaxi.city_taxi.models.entities;
 
-import com.citytaxi.city_taxi.models.enums.EAccountStatus;
 import com.citytaxi.city_taxi.models.enums.EBookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
