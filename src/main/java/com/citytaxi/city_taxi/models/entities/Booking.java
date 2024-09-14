@@ -24,12 +24,12 @@ public class Booking {
     private String endDestination;
     @Enumerated(EnumType.STRING)
     private EBookingStatus status;
-
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    Driver driver;
-
+    private Driver driver;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    Customer customer;
-
+    private Customer customer;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "rating_id", referencedColumnName = "id")
+    private Rating rating;
     private OffsetDateTime createdAt;
 }

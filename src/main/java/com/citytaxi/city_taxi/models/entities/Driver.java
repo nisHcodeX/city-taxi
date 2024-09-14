@@ -34,15 +34,12 @@ public class Driver {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
     private List<Vehicle> vehicles;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
     private List<Rating> ratings;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
-    List<Booking> bookings;
-
+    private List<Booking> bookings;
     private Double longitude;
     private Double latitude;
     private OffsetDateTime createdAt;
