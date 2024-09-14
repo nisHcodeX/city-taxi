@@ -66,6 +66,7 @@ public class AccountService implements IAccountService {
                     .id(account.getId())
                     .username(request.getUsername())
                     .password(request.getPassword())
+                    .status(account.getStatus())
                     .createdAt(account.getCreatedAt())
                     .build());
         }
@@ -115,6 +116,7 @@ public class AccountService implements IAccountService {
                     .username(account.getUsername())
                     .password(account.getPassword())
                     .status(account.getStatus().name())
+                    .createdAt(account.getCreatedAt())
                     .updatedAt(account.getUpdatedAt())
                     .build());
         }
@@ -143,6 +145,7 @@ public class AccountService implements IAccountService {
             response.add(AccountDeleteResponse.builder()
                     .id(account.getId())
                     .username(account.getUsername())
+                    .password(account.getPassword())
                     .status(account.getStatus().name())
                     .createdAt(account.getCreatedAt())
                     .updatedAt(account.getUpdatedAt())
@@ -178,6 +181,6 @@ public class AccountService implements IAccountService {
                     .build());
         }
 
-        return response;
+        return accountRepository.findAllAccounts();
     }
 }

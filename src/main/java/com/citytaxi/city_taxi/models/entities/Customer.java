@@ -26,6 +26,7 @@ public class Customer {
     private String phoneNumber;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Account account;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")

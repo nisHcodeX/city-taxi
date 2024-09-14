@@ -14,6 +14,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END FROM Account a WHERE a.id != ?1 AND a.username = ?2")
     boolean existsByUsername(Long id, String username);
 
-    @Query("SELECT new com.citytaxi.city_taxi.models.dtos.account.response.AccountGetResponse(a.id, a.username, a.password, a.status, a.createdAt, a.updatedAt) FROM Account a")
-    List<AccountGetResponse> findAllAccount();
+    @Query("SELECT new com.citytaxi.city_taxi.models.dtos.account.response.AccountGetResponse(a.id, a.username, a.password, a.status, a.customer, a.createdAt, a.updatedAt) FROM Account a")
+    List<AccountGetResponse> findAllAccounts();
 }

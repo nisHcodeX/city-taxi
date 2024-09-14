@@ -1,14 +1,12 @@
 package com.citytaxi.city_taxi.models.dtos.account.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class AccountDeleteResponse {
     private Long id;
     private String username;
