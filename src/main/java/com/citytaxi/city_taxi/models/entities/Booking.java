@@ -1,6 +1,7 @@
 package com.citytaxi.city_taxi.models.entities;
 
 import com.citytaxi.city_taxi.models.enums.EBookingStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class Booking {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Driver driver;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference
     private Customer customer;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "rating_id", referencedColumnName = "id")

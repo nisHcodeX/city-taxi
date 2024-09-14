@@ -1,5 +1,6 @@
 package com.citytaxi.city_taxi.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class Customer {
     private List<Rating> ratings;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
+    @JsonManagedReference
     private List<Booking> bookings;
     private Double longitude;
     private Double latitude;
