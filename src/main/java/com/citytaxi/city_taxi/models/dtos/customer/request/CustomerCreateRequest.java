@@ -1,18 +1,17 @@
 package com.citytaxi.city_taxi.models.dtos.customer.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
-@Builder
-@Getter
+@Data
 public class CustomerCreateRequest {
+    @NotBlank
     private String name;
-    @NotNull(message = "Email is required")
+    @NotBlank(message = "Valid email is required")
     @Pattern(regexp = "^(.+)@(.+)$", message = "Invalid email")
     private String email;
-    @NotNull(message = "Phone number is required")
+    @NotBlank(message = "Valid phone number is required")
     @Pattern(regexp = "^\\d{10}$", message = "Invalid phone number")
     private String phoneNumber;
 }

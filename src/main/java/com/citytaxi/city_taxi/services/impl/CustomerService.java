@@ -30,11 +30,10 @@ public class CustomerService implements ICustomerService {
      *
      * @param payload A list of CustomerCreateRequest objects containing the details of the customers to be created.
      * @return A CustomerCreateResponse object containing the details of the created customers.
-     * @throws NotFoundException   If any required resource is not found during the creation process.
      * @throws BadRequestException If the provided payload is invalid or contains errors.
      */
     @Override
-    public List<CustomerCreateResponse> create(List<CustomerCreateRequest> payload) throws NotFoundException, BadRequestException {
+    public List<CustomerCreateResponse> create(List<CustomerCreateRequest> payload) throws BadRequestException {
         final List<CustomerCreateResponse> response = new ArrayList<>();
 
         for (CustomerCreateRequest request : payload) {
