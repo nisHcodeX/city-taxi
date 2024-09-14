@@ -22,15 +22,22 @@ CREATE TABLE booking
     status            VARCHAR(255),
     driver_id         BIGINT,
     customer_id       BIGINT,
+    rating_id         BIGINT,
     created_at        TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_booking PRIMARY KEY (id)
 );
+
+ALTER TABLE booking
+    ADD CONSTRAINT uc_booking_rating UNIQUE (rating_id);
 
 ALTER TABLE booking
     ADD CONSTRAINT FK_BOOKING_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES customer (id);
 
 ALTER TABLE booking
     ADD CONSTRAINT FK_BOOKING_ON_DRIVER FOREIGN KEY (driver_id) REFERENCES driver (id);
+
+ALTER TABLE booking
+    ADD CONSTRAINT FK_BOOKING_ON_RATING FOREIGN KEY (rating_id) REFERENCES rating (id);
 
 CREATE SEQUENCE IF NOT EXISTS customer_sequence START WITH 1 INCREMENT BY 1;
 
