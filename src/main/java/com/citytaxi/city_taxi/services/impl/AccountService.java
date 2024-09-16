@@ -164,8 +164,6 @@ public class AccountService implements IAccountService {
      */
     @Override
     public List<AccountGetResponse> getAccounts(Long id) throws NotFoundException {
-        final List<AccountGetResponse> response = new ArrayList<>();
-
         if (id != null) {
             Account account = accountRepository.findById(id).orElseThrow(
                     () -> new NotFoundException(String.format("Account with ID %d not found", id))
