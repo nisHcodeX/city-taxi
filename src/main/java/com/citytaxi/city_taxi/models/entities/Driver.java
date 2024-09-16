@@ -26,6 +26,8 @@ public class Driver {
     private String email;
     @Column(unique = true)
     private String phoneNumber;
+    @Column(unique = true)
+    private String driverLicense;
     @Enumerated(EnumType.STRING)
     private EDriverAvailabilityStatus availability;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

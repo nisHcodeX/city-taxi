@@ -68,39 +68,6 @@ ALTER TABLE customer
 ALTER TABLE customer
     ADD CONSTRAINT FK_CUSTOMER_ON_ACCOUNT FOREIGN KEY (account_id) REFERENCES account (id);
 
-CREATE SEQUENCE IF NOT EXISTS driver_sequence START WITH 1 INCREMENT BY 1;
-
-CREATE TABLE driver
-(
-    id           BIGINT NOT NULL,
-    nic          VARCHAR(255),
-    name         VARCHAR(255),
-    email        VARCHAR(255),
-    phone_number VARCHAR(255),
-    availability VARCHAR(255),
-    account_id   BIGINT,
-    longitude    DOUBLE PRECISION,
-    latitude     DOUBLE PRECISION,
-    created_at   TIMESTAMP WITHOUT TIME ZONE,
-    updated_at   TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT pk_driver PRIMARY KEY (id)
-);
-
-ALTER TABLE driver
-    ADD CONSTRAINT uc_driver_account UNIQUE (account_id);
-
-ALTER TABLE driver
-    ADD CONSTRAINT uc_driver_email UNIQUE (email);
-
-ALTER TABLE driver
-    ADD CONSTRAINT uc_driver_nic UNIQUE (nic);
-
-ALTER TABLE driver
-    ADD CONSTRAINT uc_driver_phone_number UNIQUE (phone_number);
-
-ALTER TABLE driver
-    ADD CONSTRAINT FK_DRIVER_ON_ACCOUNT FOREIGN KEY (account_id) REFERENCES account (id);
-
 CREATE SEQUENCE IF NOT EXISTS rating_sequence START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE rating
@@ -162,3 +129,40 @@ CREATE TABLE vehicle_type
 
 ALTER TABLE vehicle_type
     ADD CONSTRAINT uc_vehicle_type_name UNIQUE (name);
+
+CREATE SEQUENCE IF NOT EXISTS driver_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE driver
+(
+    id             BIGINT NOT NULL,
+    nic            VARCHAR(255),
+    name           VARCHAR(255),
+    email          VARCHAR(255),
+    phone_number   VARCHAR(255),
+    driver_license VARCHAR(255),
+    availability   VARCHAR(255),
+    account_id     BIGINT,
+    longitude      DOUBLE PRECISION,
+    latitude       DOUBLE PRECISION,
+    created_at     TIMESTAMP WITHOUT TIME ZONE,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_driver PRIMARY KEY (id)
+);
+
+ALTER TABLE driver
+    ADD CONSTRAINT uc_driver_account UNIQUE (account_id);
+
+ALTER TABLE driver
+    ADD CONSTRAINT uc_driver_driver_license UNIQUE (driver_license);
+
+ALTER TABLE driver
+    ADD CONSTRAINT uc_driver_email UNIQUE (email);
+
+ALTER TABLE driver
+    ADD CONSTRAINT uc_driver_nic UNIQUE (nic);
+
+ALTER TABLE driver
+    ADD CONSTRAINT uc_driver_phone_number UNIQUE (phone_number);
+
+ALTER TABLE driver
+    ADD CONSTRAINT FK_DRIVER_ON_ACCOUNT FOREIGN KEY (account_id) REFERENCES account (id);

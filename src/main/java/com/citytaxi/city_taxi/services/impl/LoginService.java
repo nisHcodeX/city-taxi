@@ -6,6 +6,7 @@ import com.citytaxi.city_taxi.models.dtos.login.request.LoginRequest;
 import com.citytaxi.city_taxi.models.dtos.login.response.LoginResponse;
 import com.citytaxi.city_taxi.models.entities.Account;
 import com.citytaxi.city_taxi.models.entities.Customer;
+import com.citytaxi.city_taxi.models.entities.Driver;
 import com.citytaxi.city_taxi.repositories.AccountRepository;
 import com.citytaxi.city_taxi.services.ILoginService;
 import lombok.AllArgsConstructor;
@@ -38,11 +39,20 @@ public class LoginService implements ILoginService {
 
         // Get the name, email and phoneNumber of driver or customer associated with the account
         final Customer customer = account.getCustomer();
-        String name = customer != null ? customer.getName() : null;
-        String email = customer != null ? customer.getEmail() : null;
-        String phoneNumber = customer != null ? customer.getPhoneNumber() : null;
+        final Driver driver = account.getDriver();
+        String name = null;
+        String email = null;
+        String phoneNumber = null;
 
-        // TODO: check if driver exists and do the same as above
+        if (customer != null) {
+            name = customer.getName();
+            email = customer.getEmail();
+            phoneNumber = customer.getPhoneNumber();
+        } else if (driver != null) {
+            name = driver.getName();
+            email = driver.getEmail();
+            phoneNumber = driver.getPhoneNumber();
+        }
 
         return LoginResponse.builder()
                 .accountId(account.getId())

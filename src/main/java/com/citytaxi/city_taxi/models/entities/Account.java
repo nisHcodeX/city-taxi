@@ -29,6 +29,9 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonBackReference
     private Customer customer;
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Driver driver;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }

@@ -221,7 +221,6 @@ public class CustomerService implements ICustomerService {
      * @throws NotFoundException If a customer with the provided ID is not found.
      */
     @Override
-    @Transactional
     public List<CustomerGetResponse> getCustomers(Long id) throws NotFoundException {
         final List<CustomerGetResponse> response = new ArrayList<>();
 

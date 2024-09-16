@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("/v1/customer")
 public class CustomerController {
     private final ICustomerService customerService;
-    private final IAccountService accountService;
 
     /**
      * Retrieves customer data based on the provided ID.
