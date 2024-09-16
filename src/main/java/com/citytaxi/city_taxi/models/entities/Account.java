@@ -1,6 +1,7 @@
 package com.citytaxi.city_taxi.models.entities;
 
 import com.citytaxi.city_taxi.models.enums.EAccountStatus;
+import com.citytaxi.city_taxi.models.enums.EAccountType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,8 @@ public class Account {
     private String password;
     @Enumerated(EnumType.STRING)
     private EAccountStatus status;
+    @Enumerated(EnumType.STRING)
+    private EAccountType accountType;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonBackReference
     private Customer customer;

@@ -17,6 +17,7 @@ import com.citytaxi.city_taxi.services.IAccountService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class AccountService implements IAccountService {
      * @throws BadRequestException if the username already exists.
      */
     @Override
+    @Transactional
     public List<AccountCreateResponse> create(List<AccountCreateRequest> payload) throws BadRequestException {
         final List<AccountCreateResponse> response = new ArrayList<>();
 
@@ -83,6 +85,7 @@ public class AccountService implements IAccountService {
      * @throws BadRequestException if the username already exists.
      */
     @Override
+    @Transactional
     public List<AccountUpdateResponse> update(List<AccountUpdateRequest> payload) throws NotFoundException, BadRequestException {
         final List<AccountUpdateResponse> response = new ArrayList<>();
 
@@ -132,6 +135,7 @@ public class AccountService implements IAccountService {
      * @throws NotFoundException if the account with the specified ID is not found.
      */
     @Override
+    @Transactional
     public List<AccountDeleteResponse> delete(List<Long> ids) throws NotFoundException {
         final List<AccountDeleteResponse> response = new ArrayList<>();
 
@@ -163,6 +167,7 @@ public class AccountService implements IAccountService {
      * @throws NotFoundException if the account with the specified ID is not found.
      */
     @Override
+    @Transactional
     public List<AccountGetResponse> getAccounts(Long id) throws NotFoundException {
         if (id != null) {
             Account account = accountRepository.findById(id).orElseThrow(
