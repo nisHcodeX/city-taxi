@@ -1,7 +1,9 @@
 package com.citytaxi.city_taxi.controllers;
 
-import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerCreateRequest;
+import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerRegistrationRequest;
 import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerUpdateRequest;
+import com.citytaxi.city_taxi.models.dtos.customer.response.CustomerGetResponse;
+import com.citytaxi.city_taxi.services.IAccountService;
 import com.citytaxi.city_taxi.services.ICustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/v1/customer")
 public class CustomerController {
     private final ICustomerService customerService;
+    private final IAccountService accountService;
 
     /**
      * Retrieves customer data based on the provided ID.
@@ -26,18 +29,23 @@ public class CustomerController {
      */
     @GetMapping
     public ResponseEntity<?> getCustomers(@RequestParam(value = "id", required = false) Long id) {
-        return ResponseEntity.ok(customerService.getCustomers(id));
+        final List<CustomerGetResponse> customers = customerService.getCustomers(id);
+
+        if (customers.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(customers);
     }
 
     /**
-     * Creates new customers based on the provided payload.
+     * Registers a new customer based on the provided payload.
      *
-     * @param payload A list of CustomerCreateRequest objects containing the details of the customers to be created.
-     * @return A ResponseEntity containing the created customers and a CREATED status.
+     * @param payload A CustomerRegistrationRequest objects containing the details of the customer to be created.
+     * @return A ResponseEntity containing the created customer and a CREATED status.
      */
-    @PostMapping
-    public ResponseEntity<?> createCustomer(@Valid @RequestBody List<CustomerCreateRequest> payload) {
-        return new ResponseEntity<>(customerService.create(payload), HttpStatus.CREATED);
+    @PostMapping("/register")
+    public ResponseEntity<?> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest payload) {
+        return new ResponseEntity<>(customerService.registerCustomer(payload), HttpStatus.CREATED);
     }
 
     /**
@@ -61,5 +69,6 @@ public class CustomerController {
     public ResponseEntity<?> deleteCustomer(@RequestParam("ids") List<Long> ids) {
         return new ResponseEntity<>(customerService.delete(ids), HttpStatus.OK);
     }
+
 
 }

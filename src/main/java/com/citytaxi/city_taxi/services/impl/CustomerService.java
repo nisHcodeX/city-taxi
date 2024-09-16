@@ -42,14 +42,12 @@ public class CustomerService implements ICustomerService {
             throw new BadRequestException("Customer with email or phone number already exists");
         }
 
-        if (accountRepository.existsByUsername(payload.getUsername())) {
-            throw new BadRequestException("Username already exists");
-        }
+        // TODO: create method to generate username and password and send email...
 
         // Create the account instance
         Account account = Account.builder()
-                .username(payload.getUsername())
-                .password(payload.getPassword())
+                .username(payload.getEmail())
+                .password("")
                 .status(EAccountStatus.ACTIVE)
                 .accountType(EAccountType.CUSTOMER)
                 .createdAt(OffsetDateTime.now())

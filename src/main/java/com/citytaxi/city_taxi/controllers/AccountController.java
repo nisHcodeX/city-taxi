@@ -1,6 +1,5 @@
 package com.citytaxi.city_taxi.controllers;
 
-import com.citytaxi.city_taxi.models.dtos.account.request.AccountCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.account.request.AccountUpdateRequest;
 import com.citytaxi.city_taxi.services.IAccountService;
 import jakarta.validation.Valid;
@@ -14,8 +13,8 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/customer/account")
-public class CustomerAccountController {
+@RequestMapping("/v1/accounts")
+public class AccountController {
     private final IAccountService accountService;
 
     /**
@@ -27,17 +26,6 @@ public class CustomerAccountController {
     @GetMapping
     public ResponseEntity<?> getAccounts(@RequestParam(value = "id", required = false) Long id) {
         return ResponseEntity.ok(accountService.getAccounts(id));
-    }
-
-    /**
-     * Creates new accounts based on the provided payload.
-     *
-     * @param payload A list of AccountCreateRequest objects containing the details of the accounts to be created.
-     * @return A ResponseEntity containing the created accounts and a CREATED status.
-     */
-    @PostMapping
-    public ResponseEntity<?> createAccount(@Valid @RequestBody List<AccountCreateRequest> payload) {
-        return new ResponseEntity<>(accountService.create(payload), HttpStatus.CREATED);
     }
 
     /**
@@ -61,5 +49,4 @@ public class CustomerAccountController {
     public ResponseEntity<?> deleteAccount(@RequestParam("ids") List<Long> ids) {
         return new ResponseEntity<>(accountService.delete(ids), HttpStatus.OK);
     }
-
 }

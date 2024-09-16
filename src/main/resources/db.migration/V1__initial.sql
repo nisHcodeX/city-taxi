@@ -2,12 +2,13 @@ CREATE SEQUENCE IF NOT EXISTS account_sequence START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE account
 (
-    id         BIGINT NOT NULL,
-    username   VARCHAR(255),
-    password   VARCHAR(255),
-    status     VARCHAR(255),
-    created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    id           BIGINT NOT NULL,
+    username     VARCHAR(255),
+    password     VARCHAR(255),
+    status       VARCHAR(255),
+    account_type VARCHAR(255),
+    created_at   TIMESTAMP WITHOUT TIME ZONE,
+    updated_at   TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_account PRIMARY KEY (id)
 );
 

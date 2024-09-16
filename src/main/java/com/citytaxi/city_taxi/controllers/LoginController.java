@@ -20,7 +20,7 @@ public class LoginController {
      * @param payload The LoginRequest object containing the login details.
      * @return A ResponseEntity containing the login response.
      */
-    @PostMapping("/login")
+    @PostMapping("/public/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest payload) {
         return ResponseEntity.ok(loginService.customerAndDriverLogin(payload));
     }

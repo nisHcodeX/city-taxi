@@ -14,13 +14,4 @@ public class CustomerRegistrationRequest {
     @NotBlank(message = "Valid phone number is required")
     @Pattern(regexp = "^\\d{10}$", message = "Invalid phone number")
     private String phoneNumber;
-    @NotBlank(message = "Valid username is required")
-    private String username;
-    @NotBlank(message = "Valid password is required")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
-            message = "Password must contain at least one lowercase letter, one uppercase letter, " +
-                    "one digit, one special character, and must be at least 8 characters long"
-    )
-    private String password;
 }
