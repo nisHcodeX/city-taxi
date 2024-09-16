@@ -6,6 +6,7 @@ import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerCreateRequest
 import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerRegistrationRequest;
 import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerUpdateRequest;
 import com.citytaxi.city_taxi.models.dtos.customer.response.*;
+import com.citytaxi.city_taxi.models.dtos.email.SendRegistrationEmailRequest;
 import com.citytaxi.city_taxi.models.entities.Account;
 import com.citytaxi.city_taxi.models.entities.Customer;
 import com.citytaxi.city_taxi.models.enums.EAccountStatus;
@@ -13,6 +14,7 @@ import com.citytaxi.city_taxi.models.enums.EAccountType;
 import com.citytaxi.city_taxi.repositories.AccountRepository;
 import com.citytaxi.city_taxi.repositories.CustomerRepository;
 import com.citytaxi.city_taxi.services.ICustomerService;
+import com.citytaxi.city_taxi.util.PasswordGenerator;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 @Service
 @Log4j2
@@ -28,6 +31,8 @@ import java.util.List;
 public class CustomerService implements ICustomerService {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final BlockingQueue<SendRegistrationEmailRequest> emailQueue;
+    private final PasswordGenerator passwordGenerator;
 
     /**
      * Registers a new customer based on the provided payload.
@@ -42,12 +47,12 @@ public class CustomerService implements ICustomerService {
             throw new BadRequestException("Customer with email or phone number already exists");
         }
 
-        // TODO: create method to generate username and password and send email...
+        final String password = passwordGenerator.generatePassword(8);
 
         // Create the account instance
         Account account = Account.builder()
                 .username(payload.getEmail())
-                .password("")
+                .password(password)
                 .status(EAccountStatus.ACTIVE)
                 .accountType(EAccountType.CUSTOMER)
                 .createdAt(OffsetDateTime.now())
@@ -64,6 +69,15 @@ public class CustomerService implements ICustomerService {
                 .build();
         customerRepository.save(customer);
         log.debug("customer registered");
+
+        // Send registration email
+        SendRegistrationEmailRequest emailRequest = SendRegistrationEmailRequest.builder()
+                .to(payload.getEmail())
+                .subject("City Taxi Registration")
+                .username(payload.getEmail())
+                .password(password)
+                .build();
+        emailQueue.add(emailRequest);
 
         return CustomerRegistrationResponse.builder()
                 .id(customer.getId())
