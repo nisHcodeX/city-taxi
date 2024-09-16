@@ -168,6 +168,7 @@ public class CustomerService implements ICustomerService {
 
             customer.setUpdatedAt(OffsetDateTime.now());
             customerRepository.save(customer);
+            log.debug("customer updated");
 
             response.add(CustomerUpdateResponse.builder()
                     .id(customer.getId())
@@ -199,6 +200,7 @@ public class CustomerService implements ICustomerService {
             );
 
             customerRepository.delete(customer);
+            log.debug("customer deleted");
 
             response.add(CustomerDeleteResponse.builder()
                     .id(customer.getId())
