@@ -7,6 +7,9 @@ import lombok.Data;
 
 @Data
 public class VehicleCreateRequest {
+    @NotNull(message = "Driver id is required")
+    @Min(value = 1, message = "Driver id must be greater than 0")
+    private Long driverId;
     @NotBlank(message = "Model is required")
     private String model;
     @NotBlank(message = "Manufacturer is required")

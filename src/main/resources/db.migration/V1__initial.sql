@@ -12,34 +12,6 @@ CREATE TABLE account
     CONSTRAINT pk_account PRIMARY KEY (id)
 );
 
-CREATE SEQUENCE IF NOT EXISTS booking_sequence START WITH 1 INCREMENT BY 1;
-
-CREATE TABLE booking
-(
-    id                BIGINT NOT NULL,
-    estimated_cost    DOUBLE PRECISION,
-    start_destination VARCHAR(255),
-    end_destination   VARCHAR(255),
-    status            VARCHAR(255),
-    driver_id         BIGINT,
-    customer_id       BIGINT,
-    rating_id         BIGINT,
-    created_at        TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT pk_booking PRIMARY KEY (id)
-);
-
-ALTER TABLE booking
-    ADD CONSTRAINT uc_booking_rating UNIQUE (rating_id);
-
-ALTER TABLE booking
-    ADD CONSTRAINT FK_BOOKING_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES customer (id);
-
-ALTER TABLE booking
-    ADD CONSTRAINT FK_BOOKING_ON_DRIVER FOREIGN KEY (driver_id) REFERENCES driver (id);
-
-ALTER TABLE booking
-    ADD CONSTRAINT FK_BOOKING_ON_RATING FOREIGN KEY (rating_id) REFERENCES rating (id);
-
 CREATE SEQUENCE IF NOT EXISTS customer_sequence START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE customer
@@ -160,3 +132,35 @@ CREATE TABLE vehicle_type
 
 ALTER TABLE vehicle_type
     ADD CONSTRAINT uc_vehicle_type_name UNIQUE (name);
+
+CREATE SEQUENCE IF NOT EXISTS booking_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE booking
+(
+    id                 BIGINT NOT NULL,
+    estimated_cost     DOUBLE PRECISION,
+    start_latitude     DOUBLE PRECISION,
+    start_longitude    DOUBLE PRECISION,
+    dest_latitude      DOUBLE PRECISION,
+    dest_longitude     DOUBLE PRECISION,
+    distance_in_meters DOUBLE PRECISION,
+    status             VARCHAR(255),
+    driver_id          BIGINT,
+    customer_id        BIGINT,
+    rating_id          BIGINT,
+    created_at         TIMESTAMP WITHOUT TIME ZONE,
+    updated_at         TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_booking PRIMARY KEY (id)
+);
+
+ALTER TABLE booking
+    ADD CONSTRAINT uc_booking_rating UNIQUE (rating_id);
+
+ALTER TABLE booking
+    ADD CONSTRAINT FK_BOOKING_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES customer (id);
+
+ALTER TABLE booking
+    ADD CONSTRAINT FK_BOOKING_ON_DRIVER FOREIGN KEY (driver_id) REFERENCES driver (id);
+
+ALTER TABLE booking
+    ADD CONSTRAINT FK_BOOKING_ON_RATING FOREIGN KEY (rating_id) REFERENCES rating (id);

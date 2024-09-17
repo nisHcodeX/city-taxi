@@ -20,8 +20,11 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "booking_sequence")
     private Long id;
     private Double estimatedCost;
-    private String startDestination;
-    private String endDestination;
+    private Double startLatitude;
+    private Double startLongitude;
+    private Double destLatitude;
+    private Double destLongitude;
+    private Double distanceInMeters;
     @Enumerated(EnumType.STRING)
     private EBookingStatus status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -33,4 +36,5 @@ public class Booking {
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
     private Rating rating;
     private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
 }

@@ -9,8 +9,10 @@ import com.citytaxi.city_taxi.models.dtos.vehicle.response.VehicleDeleteResponse
 import com.citytaxi.city_taxi.models.dtos.vehicle.response.VehicleGetResponse;
 import com.citytaxi.city_taxi.models.dtos.vehicle.response.VehicleUpdateResponse;
 import com.citytaxi.city_taxi.models.dtos.vehicle_type.response.VehicleTypeGetResponse;
+import com.citytaxi.city_taxi.models.entities.Driver;
 import com.citytaxi.city_taxi.models.entities.Vehicle;
 import com.citytaxi.city_taxi.models.entities.VehicleType;
+import com.citytaxi.city_taxi.repositories.DriverRepository;
 import com.citytaxi.city_taxi.repositories.VehicleRepository;
 import com.citytaxi.city_taxi.repositories.VehicleTypeRepository;
 import com.citytaxi.city_taxi.services.IVehicleService;
@@ -29,6 +31,7 @@ import java.util.List;
 public class VehicleService implements IVehicleService {
     private final VehicleTypeRepository vehicleTypeRepository;
     private final VehicleRepository vehicleRepository;
+    private final DriverRepository driverRepository;
 
     /**
      * Creates a list of vehicles based on the provided payload.
@@ -51,6 +54,10 @@ public class VehicleService implements IVehicleService {
                     () -> new BadRequestException(String.format("Vehicle type with id %s not found", request.getVehicleTypeId())
             ));
 
+            final Driver driver = driverRepository.findById(request.getDriverId()).orElseThrow(
+                    () -> new BadRequestException(String.format("Driver with id %s not found", request.getDriverId())
+            ));
+
             final VehicleTypeGetResponse vehicleTypeGetResponse = VehicleTypeGetResponse.builder()
                     .id(vehicleType.getId())
                     .name(vehicleType.getName())
@@ -71,6 +78,10 @@ public class VehicleService implements IVehicleService {
 
             vehicleRepository.save(vehicle);
             log.debug("vehicle created");
+
+            driver.setVehicles(new ArrayList<>(List.of(vehicle)));
+            driverRepository.save(driver);
+            log.debug("Vehicle assigned to driver");
 
             response.add(VehicleCreateResponse.builder()
                     .id(vehicle.getId())
