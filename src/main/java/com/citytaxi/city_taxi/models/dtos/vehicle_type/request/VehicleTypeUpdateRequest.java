@@ -11,4 +11,6 @@ public class VehicleTypeUpdateRequest {
     private String name;
     @Min(value = 1, message = "Price per meter must be greater than 0")
     private Double pricePerMeter;
+    @Min(value = 1, message = "Seat count must be greater than 0")
+    private Integer seatCount;
 }

@@ -46,6 +46,7 @@ public class VehicleTypeService implements IVehicleTypeService {
             VehicleType vehicleType = VehicleType.builder()
                     .name(request.getName())
                     .pricePerMeter(request.getPricePerMeter())
+                    .seatCount(request.getSeatCount())
                     .createdAt(OffsetDateTime.now())
                     .build();
 
@@ -56,6 +57,7 @@ public class VehicleTypeService implements IVehicleTypeService {
                     .id(vehicleType.getId())
                     .name(vehicleType.getName())
                     .pricePerMeter(vehicleType.getPricePerMeter())
+                    .seatCount(vehicleType.getSeatCount())
                     .createdAt(vehicleType.getCreatedAt())
                     .build());
         }
@@ -77,7 +79,7 @@ public class VehicleTypeService implements IVehicleTypeService {
         final List<VehicleTypeUpdateResponse> response = new ArrayList<>();
 
         for (VehicleTypeUpdateRequest request : payload) {
-            final VehicleType customer = vehicleTypeRepository.findById(request.getId()).orElseThrow(
+            final VehicleType vehicleType = vehicleTypeRepository.findById(request.getId()).orElseThrow(
                     () -> new NotFoundException(String.format("Vehicle type with ID %d not found", request.getId()))
             );
 
@@ -85,23 +87,28 @@ public class VehicleTypeService implements IVehicleTypeService {
                 if (vehicleTypeRepository.existsByName(request.getId(), request.getName())) {
                     throw new BadRequestException(String.format("Vehicle type with name %s already exists", request.getName()));
                 }
-                customer.setName(request.getName());
+                vehicleType.setName(request.getName());
             }
 
             if (request.getPricePerMeter() != null) {
-                customer.setPricePerMeter(request.getPricePerMeter());
+                vehicleType.setPricePerMeter(request.getPricePerMeter());
             }
 
-            customer.setUpdatedAt(OffsetDateTime.now());
-            vehicleTypeRepository.save(customer);
+            if (request.getSeatCount() != null) {
+                vehicleType.setSeatCount(request.getSeatCount());
+            }
+
+            vehicleType.setUpdatedAt(OffsetDateTime.now());
+            vehicleTypeRepository.save(vehicleType);
             log.debug("vehicle type updated");
 
             response.add(VehicleTypeUpdateResponse.builder()
-                    .id(customer.getId())
-                    .name(customer.getName())
-                    .pricePerMeter(customer.getPricePerMeter())
-                    .createdAt(customer.getCreatedAt())
-                    .updatedAt(customer.getUpdatedAt())
+                    .id(vehicleType.getId())
+                    .name(vehicleType.getName())
+                    .pricePerMeter(vehicleType.getPricePerMeter())
+                    .seatCount(vehicleType.getSeatCount())
+                    .createdAt(vehicleType.getCreatedAt())
+                    .updatedAt(vehicleType.getUpdatedAt())
                     .build());
         }
         return response;
@@ -131,6 +138,7 @@ public class VehicleTypeService implements IVehicleTypeService {
                     .id(vehicleType.getId())
                     .name(vehicleType.getName())
                     .pricePerMeter(vehicleType.getPricePerMeter())
+                    .seatCount(vehicleType.getSeatCount())
                     .createdAt(vehicleType.getCreatedAt())
                     .updatedAt(vehicleType.getUpdatedAt())
                     .build());
@@ -149,16 +157,17 @@ public class VehicleTypeService implements IVehicleTypeService {
     @Override
     public List<VehicleTypeGetResponse> getVehicleTypes(Long id) {
         if (id != null) {
-            VehicleType customer = vehicleTypeRepository.findById(id).orElseThrow(
+            VehicleType vehicleType = vehicleTypeRepository.findById(id).orElseThrow(
                     () -> new NotFoundException(String.format("Vehicle type with ID %d not found", id))
             );
 
             return List.of(VehicleTypeGetResponse.builder()
-                    .id(customer.getId())
-                    .name(customer.getName())
-                    .pricePerMeter(customer.getPricePerMeter())
-                    .createdAt(customer.getCreatedAt())
-                    .updatedAt(customer.getUpdatedAt())
+                    .id(vehicleType.getId())
+                    .name(vehicleType.getName())
+                    .pricePerMeter(vehicleType.getPricePerMeter())
+                    .seatCount(vehicleType.getSeatCount())
+                    .createdAt(vehicleType.getCreatedAt())
+                    .updatedAt(vehicleType.getUpdatedAt())
                     .build());
         }
         return vehicleTypeRepository.findAllVehicleTypes();

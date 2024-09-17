@@ -11,5 +11,6 @@ public class VehicleTypeCreateResponse {
     private Long id;
     private String name;
     private Double pricePerMeter;
+    private Integer seatCount;
     private OffsetDateTime createdAt;
 }

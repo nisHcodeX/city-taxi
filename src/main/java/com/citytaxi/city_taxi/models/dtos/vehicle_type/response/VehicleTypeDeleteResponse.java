@@ -12,5 +12,6 @@ public class VehicleTypeDeleteResponse {
     private String name;
     private Double pricePerMeter;
     private OffsetDateTime createdAt;
+    private Integer seatCount;
     private OffsetDateTime updatedAt;
 }

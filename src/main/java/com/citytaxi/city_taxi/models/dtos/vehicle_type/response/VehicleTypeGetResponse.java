@@ -15,6 +15,7 @@ public class VehicleTypeGetResponse {
     private Long id;
     private String name;
     private Double pricePerMeter;
+    private Integer seatCount;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }

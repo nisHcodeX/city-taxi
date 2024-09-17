@@ -12,4 +12,7 @@ public class VehicleTypeCreateRequest {
     @NotNull(message = "Price per meter is required")
     @Min(value = 1, message = "Price per meter must be greater than 0")
     private Double pricePerMeter;
+    @NotNull(message = "Seat count is required")
+    @Min(value = 1, message = "Seat count must be greater than 0")
+    private Integer seatCount;
 }
