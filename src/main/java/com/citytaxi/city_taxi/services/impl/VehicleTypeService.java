@@ -26,6 +26,8 @@ import java.util.List;
 public class VehicleTypeService implements IVehicleTypeService {
     private final VehicleTypeRepository vehicleTypeRepository;
 
+    // TODO: implement approach to assign the driver to a vehicle
+
     /**
      * Creates a list of vehicle types based on the provided payload.
      *
