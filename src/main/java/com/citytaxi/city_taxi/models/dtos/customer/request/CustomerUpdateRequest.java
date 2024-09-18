@@ -13,6 +13,6 @@ public class CustomerUpdateRequest {
     private String name;
     @Pattern(regexp = "^(.+)@(.+)$", message = "Invalid email")
     private String email;
-    @Pattern(regexp = "^\\d{10}$", message = "Invalid phone number")
+    @Pattern(regexp = "^\\+94\\d{9}$", message = "Invalid phone number")
     private String phoneNumber;
 }

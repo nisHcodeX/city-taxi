@@ -18,6 +18,7 @@ import com.citytaxi.city_taxi.repositories.DriverRepository;
 import com.citytaxi.city_taxi.services.IBookingService;
 import com.citytaxi.city_taxi.util.CostGenerator;
 import com.citytaxi.city_taxi.util.DistanceCalculator;
+import com.citytaxi.city_taxi.util.sms.SMSService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class BookingService implements IBookingService {
     private final DriverRepository driverRepository;
     private final CostGenerator costGenerator;
     private final DistanceCalculator distanceCalculator;
+    private final SMSService smsService;
 
     /**
      * Creates a list of bookings based on the provided payload.
@@ -82,7 +84,9 @@ public class BookingService implements IBookingService {
             bookingRepository.save(booking);
             log.debug("booking created");
 
-            // TODO: send SMS to customer phone number...
+            // Send SMS to customer phone number...
+            final String bookingDetails = smsService.generateBookingDetailsForSMS(booking);
+            smsService.sendSMS(customer.getPhoneNumber(), bookingDetails);
 
             response.add(BookingCreateResponse.builder()
                     .id(booking.getId())

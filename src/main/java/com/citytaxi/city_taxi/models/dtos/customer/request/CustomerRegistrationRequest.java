@@ -12,6 +12,6 @@ public class CustomerRegistrationRequest {
     @Pattern(regexp = "^(.+)@(.+)$", message = "Invalid email")
     private String email;
     @NotBlank(message = "Valid phone number is required")
-    @Pattern(regexp = "^\\d{10}$", message = "Invalid phone number")
+    @Pattern(regexp = "^\\+94\\d{9}$", message = "Invalid phone number")
     private String phoneNumber;
 }
