@@ -1,5 +1,7 @@
 package com.citytaxi.city_taxi.util.sms;
 
+import com.citytaxi.city_taxi.exceptions.BadRequestException;
+import com.citytaxi.city_taxi.exceptions.InternalServerException;
 import com.citytaxi.city_taxi.models.dtos.sms.BookingDetailsSMSResponse;
 import com.citytaxi.city_taxi.models.dtos.sms.DriverDetailsSMSResponse;
 import com.citytaxi.city_taxi.models.dtos.sms.VehicleDetailsSMSResponse;
@@ -7,6 +9,7 @@ import com.citytaxi.city_taxi.models.entities.Booking;
 import com.citytaxi.city_taxi.models.entities.Driver;
 import com.citytaxi.city_taxi.models.entities.Vehicle;
 import com.citytaxi.city_taxi.models.entities.VehicleType;
+import com.twilio.exception.ApiException;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import lombok.extern.log4j.Log4j2;
@@ -20,13 +23,22 @@ public class SMSService {
     private String fromPhoneNumber;
 
     public void sendSMS(String toPhoneNumber, String payload) {
-        Message.creator(
-                new PhoneNumber(toPhoneNumber),
-                new PhoneNumber(fromPhoneNumber),
-                payload
-        ).create();
-        log.debug("SMS sent to: {}", toPhoneNumber);
-        // FiXME: catch exception and return error message... (sample: Invalid 'To' Phone Number: +9432854XXXX)
+        try {
+            Message.creator(
+                    new PhoneNumber(toPhoneNumber),
+                    new PhoneNumber(fromPhoneNumber),
+                    payload
+            ).create();
+            log.debug("SMS sent to: {}", toPhoneNumber);
+        } catch (ApiException ex) {
+            if (ex.getMessage().contains("Invalid 'To' Phone Number")) {
+                log.error("Invalid 'To' Phone Number: {}", toPhoneNumber);
+                throw new BadRequestException(String.format("Invalid 'To' Phone Number: %s", toPhoneNumber));
+            } else {
+                log.error("Failed to send SMS to: {}", toPhoneNumber);
+                throw new InternalServerException("Failed to send SMS");
+            }
+        }
     }
 
     /**

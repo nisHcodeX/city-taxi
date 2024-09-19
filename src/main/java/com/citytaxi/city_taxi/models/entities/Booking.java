@@ -36,6 +36,9 @@ public class Booking {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "booking")
     @JsonManagedReference
     private Rating rating;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "booking")
+    @JsonBackReference
+    private Payment payment;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }
