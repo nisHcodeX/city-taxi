@@ -8,14 +8,18 @@ import com.citytaxi.city_taxi.models.dtos.account.response.AccountCreateResponse
 import com.citytaxi.city_taxi.models.dtos.account.response.AccountDeleteResponse;
 import com.citytaxi.city_taxi.models.dtos.account.response.AccountGetResponse;
 import com.citytaxi.city_taxi.models.dtos.account.response.AccountUpdateResponse;
+import com.citytaxi.city_taxi.models.dtos.customer.response.CustomerGetResponse;
+import com.citytaxi.city_taxi.models.dtos.driver.response.DriverGetResponse;
 import com.citytaxi.city_taxi.models.entities.Account;
 import com.citytaxi.city_taxi.models.entities.Customer;
+import com.citytaxi.city_taxi.models.entities.Driver;
 import com.citytaxi.city_taxi.models.enums.EAccountStatus;
 import com.citytaxi.city_taxi.repositories.AccountRepository;
 import com.citytaxi.city_taxi.repositories.CustomerRepository;
 import com.citytaxi.city_taxi.services.IAccountService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -170,20 +174,55 @@ public class AccountService implements IAccountService {
     @Transactional
     public List<AccountGetResponse> getAccounts(Long id) throws NotFoundException {
         if (id != null) {
-            Account account = accountRepository.findById(id).orElseThrow(
+            final Account account = accountRepository.findById(id).orElseThrow(
                     () -> new NotFoundException(String.format("Account with ID %d not found", id))
             );
-
-            return List.of(AccountGetResponse.builder()
-                    .id(account.getId())
-                    .username(account.getUsername())
-                    .password(account.getPassword())
-                    .status(account.getStatus())
-                    .createdAt(account.getCreatedAt())
-                    .updatedAt(account.getUpdatedAt())
-                    .build());
+            return List.of(generateAccountGetResponse(account));
         }
 
-        return accountRepository.findAllAccounts();
+        final List<AccountGetResponse> response = new ArrayList<>();
+        List<Account> accounts = accountRepository.findAll();
+
+        for (Account account : accounts) {
+            response.add(generateAccountGetResponse(account));
+        }
+        return response;
+    }
+
+    /**
+     * Generates an AccountGetResponse object from an Account entity.
+     *
+     * @param account The Account entity to be converted.
+     * @return An AccountGetResponse object containing the details of the account.
+     */
+    private AccountGetResponse generateAccountGetResponse(@NotNull Account account) {
+        final Customer customer = account.getCustomer();
+        final Driver driver = account.getDriver();
+
+        return AccountGetResponse.builder()
+                .id(account.getId())
+                .username(account.getUsername())
+                .password(account.getPassword())
+                .status(account.getStatus())
+                .customer(customer != null ? CustomerGetResponse.builder()
+                        .id(customer.getId())
+                        .name(customer.getName())
+                        .email(customer.getEmail())
+                        .phoneNumber(customer.getPhoneNumber())
+                        .createdAt(customer.getCreatedAt())
+                        .updatedAt(customer.getUpdatedAt())
+                        .build() : null)
+                .driver(driver != null ? DriverGetResponse.builder()
+                        .id(driver.getId())
+                        .name(driver.getName())
+                        .email(driver.getEmail())
+                        .phoneNumber(driver.getPhoneNumber())
+                        .driverLicense(driver.getDriverLicense())
+                        .createdAt(driver.getCreatedAt())
+                        .updatedAt(driver.getUpdatedAt())
+                        .build() : null)
+                .createdAt(account.getCreatedAt())
+                .updatedAt(account.getUpdatedAt())
+                .build();
     }
 }
