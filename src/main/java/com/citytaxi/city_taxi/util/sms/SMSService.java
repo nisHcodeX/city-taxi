@@ -26,6 +26,7 @@ public class SMSService {
                 payload
         ).create();
         log.debug("SMS sent to: {}", toPhoneNumber);
+        // FiXME: catch exception and return error message... (sample: Invalid 'To' Phone Number: +9432854XXXX)
     }
 
     /**

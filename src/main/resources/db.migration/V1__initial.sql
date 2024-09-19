@@ -157,3 +157,21 @@ ALTER TABLE driver
 
 ALTER TABLE driver
     ADD CONSTRAINT FK_DRIVER_ON_ACCOUNT FOREIGN KEY (account_id) REFERENCES account (id);
+
+CREATE SEQUENCE IF NOT EXISTS payment_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE payment
+(
+    id         BIGINT NOT NULL,
+    cost       DOUBLE PRECISION,
+    type       VARCHAR(255),
+    booking_id BIGINT,
+    created_at TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_payment PRIMARY KEY (id)
+);
+
+ALTER TABLE payment
+    ADD CONSTRAINT uc_payment_booking UNIQUE (booking_id);
+
+ALTER TABLE payment
+    ADD CONSTRAINT FK_PAYMENT_ON_BOOKING FOREIGN KEY (booking_id) REFERENCES booking (id);

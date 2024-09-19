@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.time.OffsetDateTime;
 
-@Table(name = "account")
+@Table(name = "payment")
 @Entity
 @Builder
 @Getter
