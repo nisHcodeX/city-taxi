@@ -8,7 +8,6 @@ import lombok.Data;
 public class CustomerCreateRequest {
     @NotBlank
     private String name;
-    @NotBlank(message = "Valid email is required")
     @Pattern(regexp = "^(.+)@(.+)$", message = "Invalid email")
     private String email;
     @NotBlank(message = "Valid phone number is required")

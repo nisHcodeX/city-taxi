@@ -28,8 +28,8 @@ public class Customer {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     @JsonManagedReference
     private Account account;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customer")
+    @JsonManagedReference
     private List<Rating> ratings;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
