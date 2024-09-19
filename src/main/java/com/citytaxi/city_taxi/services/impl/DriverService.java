@@ -257,4 +257,31 @@ public class DriverService implements IDriverService {
                 .createdAt(account.getCreatedAt())
                 .build();
     }
+
+    /**
+     * Retrieves a list of nearby drivers based on the provided customer location and radius.
+     *
+     * @param customerLat The latitude of the customer's location.
+     * @param customerLng The longitude of the customer's location.
+     * @param radius The radius within which to search for nearby drivers.
+     * @return A list of DriverGetResponse objects containing the details of the nearby drivers.
+     */
+    @Override
+    public List<DriverGetResponse> getNearbyDrivers(Double customerLat, Double customerLng, Double radius) {
+        final List<Driver> drivers =  driverRepository.findNearbyDrivers(customerLat, customerLng, radius);
+        final List<DriverGetResponse> response = new ArrayList<>();
+
+        for (Driver driver : drivers) {
+            response.add(DriverGetResponse.builder()
+                .id(driver.getId())
+                .name(driver.getName())
+                .email(driver.getEmail())
+                .phoneNumber(driver.getPhoneNumber())
+                .driverLicense(driver.getDriverLicense())
+                .createdAt(driver.getCreatedAt())
+                .updatedAt(driver.getUpdatedAt())
+                .build());
+        }
+        return response;
+    }
 }
