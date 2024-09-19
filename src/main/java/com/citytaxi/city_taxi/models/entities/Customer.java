@@ -1,5 +1,6 @@
 package com.citytaxi.city_taxi.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,16 +26,15 @@ public class Customer {
     private String phoneNumber;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Account account;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customer")
+    @JsonManagedReference
     private List<Rating> ratings;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    List<Booking> bookings;
-
+    @JsonManagedReference
+    private List<Booking> bookings;
     private Double longitude;
     private Double latitude;
     private OffsetDateTime createdAt;

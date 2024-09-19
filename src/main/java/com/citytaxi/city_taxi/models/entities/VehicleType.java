@@ -1,10 +1,10 @@
 package com.citytaxi.city_taxi.models.entities;
 
-import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Table(name = "vehicle_type")
 @Entity
@@ -21,6 +21,7 @@ public class VehicleType {
     @Column(unique = true)
     private String name;
     private Double pricePerMeter;
+    private Integer seatCount;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }
