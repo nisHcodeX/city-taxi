@@ -51,11 +51,13 @@ public class DriverService implements IDriverService {
                 throw new BadRequestException("Driver with email or phone number already exists");
             }
 
-            Driver driver = Driver.builder()
+            final Driver driver = Driver.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .driverLicense(request.getDriverLicense())
+                .latitude(request.getLatitude())
+                .longitude(request.getLongitude())
                 .availability(EDriverAvailabilityStatus.AVAILABLE)
                 .createdAt(OffsetDateTime.now())
                 .build();
@@ -69,6 +71,8 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .latitude(driver.getLatitude())
+                .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())
                 .build());
         }
@@ -119,8 +123,17 @@ public class DriverService implements IDriverService {
                 driver.setDriverLicense(request.getDriverLicense());
             }
 
+            if (request.getLatitude() != null) {
+                driver.setLatitude(request.getLatitude());
+            }
+
+            if (request.getLongitude() != null) {
+                driver.setLongitude(request.getLongitude());
+            }
+
             driver.setUpdatedAt(OffsetDateTime.now());
             driverRepository.save(driver);
+            log.debug("driver updated");
 
             response.add(DriverUpdateResponse.builder()
                 .id(driver.getId())
@@ -128,6 +141,8 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .latitude(driver.getLatitude())
+                .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
                 .build());
@@ -161,6 +176,8 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .latitude(driver.getLatitude())
+                .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
                 .build());
@@ -180,18 +197,20 @@ public class DriverService implements IDriverService {
     @Override
     public List<DriverGetResponse> getDrivers(Long id) throws NotFoundException {
         if (id != null) {
-            Driver customer = driverRepository.findById(id).orElseThrow(
+            Driver driver = driverRepository.findById(id).orElseThrow(
                     () -> new NotFoundException(String.format("Driver with ID %d not found", id))
             );
 
             return List.of(DriverGetResponse.builder()
-                .id(customer.getId())
-                .name(customer.getName())
-                .email(customer.getEmail())
-                .phoneNumber(customer.getPhoneNumber())
-                .driverLicense(customer.getDriverLicense())
-                .createdAt(customer.getCreatedAt())
-                .updatedAt(customer.getUpdatedAt())
+                .id(driver.getId())
+                .name(driver.getName())
+                .email(driver.getEmail())
+                .phoneNumber(driver.getPhoneNumber())
+                .driverLicense(driver.getDriverLicense())
+                .latitude(driver.getLatitude())
+                .longitude(driver.getLongitude())
+                .createdAt(driver.getCreatedAt())
+                .updatedAt(driver.getUpdatedAt())
                 .build());
         }
         return driverRepository.findAllDrivers();
@@ -253,6 +272,8 @@ public class DriverService implements IDriverService {
                 .driverLicense(driver.getDriverLicense())
                 .username(account.getUsername())
                 .password(account.getPassword())
+                .latitude(driver.getLatitude())
+                .longitude(driver.getLongitude())
                 .status(account.getStatus())
                 .createdAt(account.getCreatedAt())
                 .build();
@@ -278,6 +299,8 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .latitude(driver.getLatitude())
+                .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
                 .build());

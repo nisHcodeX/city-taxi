@@ -16,5 +16,6 @@ public class DriverUpdateRequest {
     @Pattern(regexp = "^\\+94\\d{9}$", message = "Invalid phone number")
     private String phoneNumber;
     private String driverLicense;
-
+    private Double latitude;
+    private Double longitude;
 }

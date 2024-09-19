@@ -20,8 +20,6 @@ public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "driver_sequence")
     private Long id;
-    @Column(unique = true)
-    private String nic;
     private String name;
     @Column(unique = true)
     private String email;

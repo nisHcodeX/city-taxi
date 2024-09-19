@@ -16,6 +16,8 @@ public class DriverRegistrationResponse {
     private String driverLicense;
     private String username;
     private String password;
+    private Double latitude;
+    private Double longitude;
     private EAccountStatus status;
     private OffsetDateTime createdAt;
 }

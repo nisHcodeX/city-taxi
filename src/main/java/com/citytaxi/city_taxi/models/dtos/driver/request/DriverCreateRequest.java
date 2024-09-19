@@ -16,4 +16,6 @@ public class DriverCreateRequest {
     private String phoneNumber;
     @NotBlank(message = "Valid driver license is required")
     private String driverLicense;
+    private double latitude;
+    private double longitude;
 }

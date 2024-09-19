@@ -13,5 +13,7 @@ public class DriverCreateResponse {
     private String email;
     private String phoneNumber;
     private String driverLicense;
+    private Double latitude;
+    private Double longitude;
     private OffsetDateTime createdAt;
 }
