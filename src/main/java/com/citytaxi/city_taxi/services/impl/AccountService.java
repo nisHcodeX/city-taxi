@@ -8,11 +8,11 @@ import com.citytaxi.city_taxi.models.dtos.account.response.AccountCreateResponse
 import com.citytaxi.city_taxi.models.dtos.account.response.AccountDeleteResponse;
 import com.citytaxi.city_taxi.models.dtos.account.response.AccountGetResponse;
 import com.citytaxi.city_taxi.models.dtos.account.response.AccountUpdateResponse;
+import com.citytaxi.city_taxi.models.dtos.admin.response.AdminGetResponse;
 import com.citytaxi.city_taxi.models.dtos.customer.response.CustomerGetResponse;
 import com.citytaxi.city_taxi.models.dtos.driver.response.DriverGetResponse;
-import com.citytaxi.city_taxi.models.entities.Account;
-import com.citytaxi.city_taxi.models.entities.Customer;
-import com.citytaxi.city_taxi.models.entities.Driver;
+import com.citytaxi.city_taxi.models.dtos.telephone_operator.response.TelephoneOperatorGetResponse;
+import com.citytaxi.city_taxi.models.entities.*;
 import com.citytaxi.city_taxi.models.enums.EAccountStatus;
 import com.citytaxi.city_taxi.repositories.AccountRepository;
 import com.citytaxi.city_taxi.repositories.CustomerRepository;
@@ -198,6 +198,8 @@ public class AccountService implements IAccountService {
     private AccountGetResponse generateAccountGetResponse(@NotNull Account account) {
         final Customer customer = account.getCustomer();
         final Driver driver = account.getDriver();
+        final TelephoneOperator telephoneOperator = account.getTelephoneOperator();
+        final Admin admin = account.getAdmin();
 
         return AccountGetResponse.builder()
                 .id(account.getId())
@@ -220,6 +222,22 @@ public class AccountService implements IAccountService {
                         .driverLicense(driver.getDriverLicense())
                         .createdAt(driver.getCreatedAt())
                         .updatedAt(driver.getUpdatedAt())
+                        .build() : null)
+                .telephoneOperator(telephoneOperator != null ? TelephoneOperatorGetResponse.builder()
+                        .id(telephoneOperator.getId())
+                        .name(telephoneOperator.getName())
+                        .email(telephoneOperator.getEmail())
+                        .phoneNumber(telephoneOperator.getPhoneNumber())
+                        .createdAt(telephoneOperator.getCreatedAt())
+                        .updatedAt(telephoneOperator.getUpdatedAt())
+                        .build() : null)
+                .admin(admin != null ? AdminGetResponse.builder()
+                        .id(admin.getId())
+                        .name(admin.getName())
+                        .email(admin.getEmail())
+                        .phoneNumber(admin.getPhoneNumber())
+                        .createdAt(admin.getCreatedAt())
+                        .updatedAt(admin.getUpdatedAt())
                         .build() : null)
                 .createdAt(account.getCreatedAt())
                 .updatedAt(account.getUpdatedAt())
