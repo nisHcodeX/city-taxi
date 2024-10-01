@@ -71,6 +71,7 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())
@@ -123,6 +124,10 @@ public class DriverService implements IDriverService {
                 driver.setDriverLicense(request.getDriverLicense());
             }
 
+            if (request.getAvailability() != null) {
+                driver.setAvailability(request.getAvailability());
+            }
+
             if (request.getLatitude() != null) {
                 driver.setLatitude(request.getLatitude());
             }
@@ -143,6 +148,7 @@ public class DriverService implements IDriverService {
                 .driverLicense(driver.getDriverLicense())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
+                .availability(driver.getAvailability())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
                 .build());
@@ -176,6 +182,7 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())
@@ -207,6 +214,7 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())
@@ -272,6 +280,7 @@ public class DriverService implements IDriverService {
                 .driverLicense(driver.getDriverLicense())
                 .username(account.getUsername())
                 .password(account.getPassword())
+                .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
                 .status(account.getStatus())
@@ -299,6 +308,7 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
                 .createdAt(driver.getCreatedAt())

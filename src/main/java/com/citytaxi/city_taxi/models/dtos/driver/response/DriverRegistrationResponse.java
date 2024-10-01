@@ -1,6 +1,7 @@
 package com.citytaxi.city_taxi.models.dtos.driver.response;
 
 import com.citytaxi.city_taxi.models.enums.EAccountStatus;
+import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class DriverRegistrationResponse {
     private String driverLicense;
     private String username;
     private String password;
+    private EDriverAvailabilityStatus availability;
     private Double latitude;
     private Double longitude;
     private EAccountStatus status;

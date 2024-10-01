@@ -1,5 +1,6 @@
 package com.citytaxi.city_taxi.models.dtos.driver.response;
 
+import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class DriverGetResponse {
     private String email;
     private String phoneNumber;
     private String driverLicense;
+    private EDriverAvailabilityStatus availability;
     private Double latitude;
     private Double longitude;
     private OffsetDateTime createdAt;

@@ -1,5 +1,6 @@
 package com.citytaxi.city_taxi.models.dtos.driver.request;
 
+import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -16,6 +17,7 @@ public class DriverUpdateRequest {
     @Pattern(regexp = "^\\+94\\d{9}$", message = "Invalid phone number")
     private String phoneNumber;
     private String driverLicense;
+    private EDriverAvailabilityStatus availability;
     private Double latitude;
     private Double longitude;
 }
