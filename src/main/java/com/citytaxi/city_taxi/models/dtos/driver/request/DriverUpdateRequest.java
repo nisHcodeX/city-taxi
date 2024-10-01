@@ -20,4 +20,5 @@ public class DriverUpdateRequest {
     private EDriverAvailabilityStatus availability;
     private Double latitude;
     private Double longitude;
+    private String locationName;
 }

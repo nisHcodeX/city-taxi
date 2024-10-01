@@ -18,4 +18,5 @@ public class DriverCreateRequest {
     private String driverLicense;
     private double latitude;
     private double longitude;
+    private String locationName;
 }

@@ -12,6 +12,7 @@ import com.citytaxi.city_taxi.models.dtos.vehicle.response.VehicleGetResponse;
 import com.citytaxi.city_taxi.models.dtos.vehicle_type.response.VehicleTypeGetResponse;
 import com.citytaxi.city_taxi.models.entities.*;
 import com.citytaxi.city_taxi.models.enums.EBookingStatus;
+import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import com.citytaxi.city_taxi.repositories.BookingRepository;
 import com.citytaxi.city_taxi.repositories.CustomerRepository;
 import com.citytaxi.city_taxi.repositories.DriverRepository;
@@ -87,6 +88,10 @@ public class BookingService implements IBookingService {
             // Send SMS to customer phone number...
             final String bookingDetails = smsService.generateBookingDetailsForSMS(booking);
             smsService.sendSMS(customer.getPhoneNumber(), bookingDetails);
+
+            // Update the availability of the driver to busy
+            driver.setAvailability(EDriverAvailabilityStatus.BUSY);
+            driverRepository.save(driver);
 
             response.add(BookingCreateResponse.builder()
                     .id(booking.getId())
@@ -187,6 +192,33 @@ public class BookingService implements IBookingService {
                     .updatedAt(booking.getUpdatedAt())
                     .build());
         }
+        return response;
+    }
+
+    @Override
+    public List<BookingGetResponse> markAsCompleted(List<Long> ids) {
+        final List<BookingGetResponse> response = new ArrayList<>();
+
+        for (Long id : ids) {
+            final Booking booking = bookingRepository.findById(id).orElseThrow(
+                    () -> new NotFoundException(String.format("Booking with ID %d not found", id))
+            );
+
+            booking.setStatus(EBookingStatus.COMPLETED);
+            booking.setUpdatedAt(OffsetDateTime.now());
+            bookingRepository.save(booking);
+            log.debug("booking marked as completed");
+
+            final Driver driver = booking.getDriver();
+
+            // Update the availability of the driver to available
+            driver.setAvailability(EDriverAvailabilityStatus.AVAILABLE);
+            driver.setUpdatedAt(OffsetDateTime.now());
+            driverRepository.save(driver);
+
+            response.add(generateBookingGetResponse(booking));
+        }
+
         return response;
     }
 

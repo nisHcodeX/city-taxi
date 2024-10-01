@@ -11,5 +11,6 @@ import java.util.List;
 public interface IBookingService {
     List<BookingCreateResponse> create(List<BookingCreateRequest> payload);
     List<BookingUpdateResponse> update(List<BookingUpdateRequest> payload);
+    List<BookingGetResponse> markAsCompleted(List<Long> ids);
     List<BookingGetResponse> getBookings(Long id);
 }

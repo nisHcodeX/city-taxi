@@ -7,9 +7,6 @@ import lombok.Data;
 
 @Data
 public class RatingCreateRequest {
-    @NotNull(message = "customerId is required")
-    @Min(value = 1, message = "customerId must be greater than 0")
-    private Long customerId;
     @NotNull(message = "bookingId is required")
     @Min(value = 1, message = "bookingId must be greater than 0")
     private Long bookingId;

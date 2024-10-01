@@ -44,17 +44,13 @@ public class RatingService implements IRatingService {
         final List<RatingCreateResponse> response = new ArrayList<>();
 
         for (RatingCreateRequest request : payload) {
-            final Customer customer = customerRepository.findById(request.getCustomerId()).orElseThrow(
-                    () -> new NotFoundException(String.format("Customer with id %d not found", request.getCustomerId()))
-            );
-
             final Booking booking = bookingRepository.findById(request.getBookingId()).orElseThrow(
                     () -> new NotFoundException(String.format("Booking with id %d not found", request.getBookingId()))
             );
 
             final Rating rating = Rating.builder()
                     .rating(request.getRating())
-                    .customer(customer)
+                    .customer(booking.getCustomer())
                     .booking(booking)
                     .createdAt(OffsetDateTime.now())
                     .build();

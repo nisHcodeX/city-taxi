@@ -41,6 +41,7 @@ public class Driver {
     private List<Booking> bookings;
     private Double longitude;
     private Double latitude;
+    private String locationName;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }

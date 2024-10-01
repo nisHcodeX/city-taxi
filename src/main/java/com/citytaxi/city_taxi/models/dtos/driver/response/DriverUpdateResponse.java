@@ -17,6 +17,7 @@ public class DriverUpdateResponse {
     private EDriverAvailabilityStatus availability;
     private Double latitude;
     private Double longitude;
+    private String locationName;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }

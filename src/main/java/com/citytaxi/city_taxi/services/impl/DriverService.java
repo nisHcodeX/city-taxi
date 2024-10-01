@@ -6,8 +6,12 @@ import com.citytaxi.city_taxi.models.dtos.driver.request.DriverCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.driver.request.DriverUpdateRequest;
 import com.citytaxi.city_taxi.models.dtos.driver.response.*;
 import com.citytaxi.city_taxi.models.dtos.email.SendRegistrationEmailRequest;
+import com.citytaxi.city_taxi.models.dtos.vehicle.response.VehicleGetResponse;
+import com.citytaxi.city_taxi.models.dtos.vehicle_type.response.VehicleTypeGetResponse;
 import com.citytaxi.city_taxi.models.entities.Account;
 import com.citytaxi.city_taxi.models.entities.Driver;
+import com.citytaxi.city_taxi.models.entities.Vehicle;
+import com.citytaxi.city_taxi.models.entities.VehicleType;
 import com.citytaxi.city_taxi.models.enums.EAccountStatus;
 import com.citytaxi.city_taxi.models.enums.EAccountType;
 import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
@@ -58,6 +62,7 @@ public class DriverService implements IDriverService {
                 .driverLicense(request.getDriverLicense())
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
+                .locationName(request.getLocationName())
                 .availability(EDriverAvailabilityStatus.AVAILABLE)
                 .createdAt(OffsetDateTime.now())
                 .build();
@@ -74,6 +79,7 @@ public class DriverService implements IDriverService {
                 .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
+                .locationName(driver.getLocationName())
                 .createdAt(driver.getCreatedAt())
                 .build());
         }
@@ -128,6 +134,10 @@ public class DriverService implements IDriverService {
                 driver.setAvailability(request.getAvailability());
             }
 
+            if (request.getLocationName() != null) {
+                driver.setLocationName(request.getLocationName());
+            }
+
             if (request.getLatitude() != null) {
                 driver.setLatitude(request.getLatitude());
             }
@@ -148,6 +158,7 @@ public class DriverService implements IDriverService {
                 .driverLicense(driver.getDriverLicense())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
+                .locationName(driver.getLocationName())
                 .availability(driver.getAvailability())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
@@ -185,6 +196,7 @@ public class DriverService implements IDriverService {
                 .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
+                .locationName(driver.getLocationName())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
                 .build());
@@ -217,6 +229,7 @@ public class DriverService implements IDriverService {
                 .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
+                .locationName(driver.getLocationName())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
                 .build());
@@ -256,6 +269,9 @@ public class DriverService implements IDriverService {
                 .phoneNumber(payload.getPhoneNumber())
                 .driverLicense(payload.getDriverLicense())
                 .availability(EDriverAvailabilityStatus.AVAILABLE)
+                .latitude(payload.getLatitude())
+                .longitude(payload.getLongitude())
+                .locationName(payload.getLocationName())
                 .account(account)
                 .createdAt(OffsetDateTime.now())
                 .build();
@@ -283,6 +299,7 @@ public class DriverService implements IDriverService {
                 .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
+                .locationName(driver.getLocationName())
                 .status(account.getStatus())
                 .createdAt(account.getCreatedAt())
                 .build();
@@ -297,12 +314,17 @@ public class DriverService implements IDriverService {
      * @return A list of DriverGetResponse objects containing the details of the nearby drivers.
      */
     @Override
-    public List<DriverGetResponse> getNearbyDrivers(Double customerLat, Double customerLng, Double radius) {
+    public List<DriverGetNearbyResponse> getNearbyDrivers(Double customerLat, Double customerLng, Double radius) {
         final List<Driver> drivers =  driverRepository.findNearbyDrivers(customerLat, customerLng, radius);
-        final List<DriverGetResponse> response = new ArrayList<>();
+        final List<DriverGetNearbyResponse> response = new ArrayList<>();
+        Vehicle vehicle;
+        VehicleType vehicleType;
 
         for (Driver driver : drivers) {
-            response.add(DriverGetResponse.builder()
+            vehicle = driver.getVehicles().get(0);
+            vehicleType = vehicle.getVehicleType();
+
+            response.add(DriverGetNearbyResponse.builder()
                 .id(driver.getId())
                 .name(driver.getName())
                 .email(driver.getEmail())
@@ -311,6 +333,24 @@ public class DriverService implements IDriverService {
                 .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
+                .locationName(driver.getLocationName())
+                .vehicle(VehicleGetResponse.builder()
+                    .id(vehicle.getId())
+                    .manufacturer(vehicle.getManufacturer())
+                    .model(vehicle.getModel())
+                    .colour(vehicle.getColour())
+                    .licensePlate(vehicle.getLicensePlate())
+                    .vehicleType(VehicleTypeGetResponse.builder()
+                        .id(vehicleType.getId())
+                        .name(vehicleType.getName())
+                        .pricePerMeter(vehicleType.getPricePerMeter())
+                        .seatCount(vehicleType.getSeatCount())
+                        .createdAt(vehicleType.getCreatedAt())
+                        .updatedAt(vehicleType.getUpdatedAt())
+                        .build())
+                    .createdAt(vehicle.getCreatedAt())
+                    .updatedAt(vehicle.getUpdatedAt())
+                    .build())
                 .createdAt(driver.getCreatedAt())
                 .updatedAt(driver.getUpdatedAt())
                 .build());

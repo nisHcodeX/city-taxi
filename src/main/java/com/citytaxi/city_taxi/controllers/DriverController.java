@@ -2,6 +2,7 @@ package com.citytaxi.city_taxi.controllers;
 
 import com.citytaxi.city_taxi.models.dtos.driver.request.DriverCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.driver.request.DriverUpdateRequest;
+import com.citytaxi.city_taxi.models.dtos.driver.response.DriverGetNearbyResponse;
 import com.citytaxi.city_taxi.models.dtos.driver.response.DriverGetResponse;
 import com.citytaxi.city_taxi.services.IDriverService;
 import jakarta.validation.Valid;
@@ -74,11 +75,11 @@ public class DriverController {
      * @param lat The latitude of the location to search for nearby drivers.
      * @param lng The longitude of the location to search for nearby drivers.
      * @param radius The radius within which to search for nearby drivers.
-     * @return ResponseEntity containing a list of DriverGetResponse objects or NO_CONTENT status if no drivers are found.
+     * @return ResponseEntity containing a list of DriverGetNearbyResponse objects or NO_CONTENT status if no drivers are found.
      */
     @GetMapping("/nearby")
     public ResponseEntity<?> getNearbyDrivers(@RequestParam double lat, @RequestParam double lng, @RequestParam double radius) {
-        final List<DriverGetResponse> drivers = driverService.getNearbyDrivers(lat, lng, radius);
+        final List<DriverGetNearbyResponse> drivers = driverService.getNearbyDrivers(lat, lng, radius);
         if (drivers.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

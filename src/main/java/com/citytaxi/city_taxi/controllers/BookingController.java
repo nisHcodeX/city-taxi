@@ -51,7 +51,7 @@ public class BookingController {
      * @param payload List of BookingUpdateRequest objects containing updated booking details.
      * @return ResponseEntity containing the updated bookings with HTTP status OK.
      */
-    @PatchMapping
+    @PatchMapping("/status")
     public ResponseEntity<?> updateBooking(@Valid @RequestBody List<BookingUpdateRequest> payload) {
         return new ResponseEntity<>(bookingService.update(payload), HttpStatus.OK);
     }

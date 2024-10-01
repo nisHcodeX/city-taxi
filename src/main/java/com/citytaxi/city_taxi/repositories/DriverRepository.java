@@ -18,7 +18,7 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     boolean existsByPhoneNumber(Long id, String phoneNumber);
     @Query("SELECT CASE WHEN COUNT(d) > 0 THEN true ELSE false END FROM Driver d WHERE d.id != ?1 AND d.driverLicense = ?2")
     boolean existsByDriverLicense(Long id, String driverLicense);
-    @Query("SELECT new com.citytaxi.city_taxi.models.dtos.driver.response.DriverGetResponse(d.id, d.name, d.email, d.phoneNumber, d.driverLicense, d.availability, d.latitude, d.longitude, d.createdAt, d.updatedAt) FROM Driver d")
+    @Query("SELECT new com.citytaxi.city_taxi.models.dtos.driver.response.DriverGetResponse(d.id, d.name, d.email, d.phoneNumber, d.driverLicense, d.availability, d.latitude, d.longitude, d.locationName, d.createdAt, d.updatedAt) FROM Driver d")
     List<DriverGetResponse> findAllDrivers();
     @Query("SELECT d FROM Driver d WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(d.latitude)) * cos(radians(d.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(d.latitude)))) < :radius AND d.availability = 'AVAILABLE'")
     List<Driver> findNearbyDrivers(@Param("lat") double lat, @Param("lng") double lng, @Param("radius") double radius);

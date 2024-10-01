@@ -12,5 +12,5 @@ public interface IDriverService {
     List<DriverDeleteResponse> delete(List<Long> ids);
     List<DriverGetResponse> getDrivers(Long id);
     DriverRegistrationResponse registerDriver(DriverCreateRequest payload);
-    List<DriverGetResponse> getNearbyDrivers(Double customerLat, Double customerLng, Double radius);
+    List<DriverGetNearbyResponse> getNearbyDrivers(Double customerLat, Double customerLng, Double radius);
 }
