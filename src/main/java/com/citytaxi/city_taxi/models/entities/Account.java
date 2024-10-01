@@ -32,6 +32,12 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonBackReference
     private Driver driver;
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Admin admin;
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private TelephoneOperator telephoneOperator;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }

@@ -21,7 +21,19 @@ public class LoginController {
      * @return A ResponseEntity containing the login response.
      */
     @PostMapping("/public/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest payload) {
-        return ResponseEntity.ok(loginService.customerAndDriverLogin(payload));
+    public ResponseEntity<?> publicLogin(@Valid @RequestBody LoginRequest payload) {
+        return ResponseEntity.ok(loginService.publicUserLogin(payload));
     }
+
+    /**
+     * Handles the login request for internal users such as admins and telephone operators.
+     *
+     * @param payload The LoginRequest object containing the login details.
+     * @return A ResponseEntity containing the login response.
+     */
+    @PostMapping("/internal/login")
+    public ResponseEntity<?> internalLogin(@Valid @RequestBody LoginRequest payload) {
+        return ResponseEntity.ok(loginService.internalUserLogin(payload));
+    }
+
 }

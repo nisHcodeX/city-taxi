@@ -4,5 +4,6 @@ import com.citytaxi.city_taxi.models.dtos.login.request.LoginRequest;
 import com.citytaxi.city_taxi.models.dtos.login.response.LoginResponse;
 
 public interface ILoginService {
-    LoginResponse customerAndDriverLogin(LoginRequest payload);
+    LoginResponse publicUserLogin(LoginRequest payload);
+    LoginResponse internalUserLogin(LoginRequest payload);
 }
