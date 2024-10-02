@@ -13,5 +13,5 @@ public interface IRatingService {
     List<RatingCreateResponse> create(List<RatingCreateRequest> payload);
     List<RatingUpdateResponse> update(List<RatingUpdateRequest> payload);
     List<RatingDeleteResponse> delete(List<Long> ids);
-    List<RatingGetResponse> getRatings(Long customerId, Long bookingId);
+    List<RatingGetResponse> getRatings(Long customerId, Long driverId, Long bookingId);
 }

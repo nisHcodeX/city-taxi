@@ -20,9 +20,10 @@ public class RatingController {
     private final IRatingService ratingService;
 
     @GetMapping
-    public ResponseEntity<?> getCustomers(@RequestParam(value = "customerId", required = false) Long customerId,
+    public ResponseEntity<?> getRatings(@RequestParam(value = "customerId", required = false) Long customerId,
+                                          @RequestParam(value = "driverId", required = false) Long driverId,
                                           @RequestParam(value = "bookingId", required = false) Long bookingId) {
-        final List<RatingGetResponse> ratings = ratingService.getRatings(customerId, bookingId);
+        final List<RatingGetResponse> ratings = ratingService.getRatings(customerId, driverId, bookingId);
 
         if (ratings.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

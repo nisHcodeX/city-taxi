@@ -11,6 +11,7 @@ import com.citytaxi.city_taxi.models.entities.Booking;
 import com.citytaxi.city_taxi.models.entities.Rating;
 import com.citytaxi.city_taxi.repositories.BookingRepository;
 import com.citytaxi.city_taxi.repositories.CustomerRepository;
+import com.citytaxi.city_taxi.repositories.DriverRepository;
 import com.citytaxi.city_taxi.repositories.RatingRepository;
 import com.citytaxi.city_taxi.services.IRatingService;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.List;
 @Log4j2
 @AllArgsConstructor
 public class RatingService implements IRatingService {
+    private final DriverRepository driverRepository;
     private final RatingRepository ratingRepository;
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
@@ -142,12 +144,19 @@ public class RatingService implements IRatingService {
      * @throws NotFoundException if the customer or booking with the specified ID is not found.
      */
     @Override
-    public List<RatingGetResponse> getRatings(Long customerId, Long bookingId) {
+    public List<RatingGetResponse> getRatings(Long customerId, Long driverId, Long bookingId) {
         if (customerId != null) {
             customerRepository.findById(customerId).orElseThrow(
                     () -> new NotFoundException(String.format("Customer with ID %d not found", customerId))
             );
             return ratingRepository.findAllByCustomerId(customerId);
+        }
+
+        if (driverId != null) {
+            driverRepository.findById(driverId).orElseThrow(
+                    () -> new NotFoundException(String.format("Driver with ID %d not found", driverId))
+            );
+            return ratingRepository.findAllByDriverId(driverId);
         }
 
         if (bookingId != null) {
