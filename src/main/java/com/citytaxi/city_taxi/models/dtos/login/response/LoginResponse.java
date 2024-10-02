@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginResponse {
     private Long accountId;
+    private Long userId;
     private EAccountType accountType;
     private String username;
     private String password;

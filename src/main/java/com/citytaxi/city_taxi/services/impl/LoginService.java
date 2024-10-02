@@ -42,21 +42,25 @@ public class LoginService implements ILoginService {
         // Get the name, email and phoneNumber of driver or customer associated with the account
         final Customer customer = account.getCustomer();
         final Driver driver = account.getDriver();
+        Long userId = null;
         String name = null;
         String email = null;
         String phoneNumber = null;
 
         if (customer != null) {
+            userId = customer.getId();
             name = customer.getName();
             email = customer.getEmail();
             phoneNumber = customer.getPhoneNumber();
         } else if (driver != null) {
+            userId = driver.getId();
             name = driver.getName();
             email = driver.getEmail();
             phoneNumber = driver.getPhoneNumber();
         }
 
         return LoginResponse.builder()
+                .userId(userId)
                 .accountId(account.getId())
                 .accountType(account.getAccountType())
                 .username(account.getUsername())
@@ -90,21 +94,25 @@ public class LoginService implements ILoginService {
         // Get the name, email and phoneNumber of admin or telephone operator associated with the account
         final Admin admin = account.getAdmin();
         final TelephoneOperator telephoneOperator = account.getTelephoneOperator();
+        Long userId = null;
         String name = null;
         String email = null;
         String phoneNumber = null;
 
         if (admin != null) {
+            userId = admin.getId();
             name = admin.getName();
             email = admin.getEmail();
             phoneNumber = admin.getPhoneNumber();
         } else if (telephoneOperator != null) {
+            userId = telephoneOperator.getId();
             name = telephoneOperator.getName();
             email = telephoneOperator.getEmail();
             phoneNumber = telephoneOperator.getPhoneNumber();
         }
 
         return LoginResponse.builder()
+                .userId(userId)
                 .accountId(account.getId())
                 .accountType(account.getAccountType())
                 .username(account.getUsername())
