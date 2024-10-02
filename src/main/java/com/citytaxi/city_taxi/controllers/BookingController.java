@@ -20,10 +20,13 @@ public class BookingController {
     private final IBookingService bookingService;
 
     /**
-     * Retrieves a list of bookings. If an ID is provided, retrieves the booking with the specified ID.
+     * Handles HTTP GET requests for retrieving bookings.
      *
-     * @param id Optional booking ID to retrieve a specific booking.
-     * @return ResponseEntity containing the list of bookings or the specific booking.
+     * @param id Optional query parameter for filtering bookings by their ID.
+     * @param customerId Optional query parameter for filtering bookings by customer ID.
+     * @param driverId Optional query parameter for filtering bookings by driver ID.
+     * @return ResponseEntity containing a list of BookingGetResponse objects and HTTP status OK if bookings are found,
+     *         or HTTP status NO_CONTENT if no bookings are found.
      */
     @GetMapping
     public ResponseEntity<?> getBookings(

@@ -223,12 +223,15 @@ public class BookingService implements IBookingService {
         return response;
     }
 
+
     /**
-     * Retrieves a list of bookings. If an ID is provided, retrieves the booking with the specified ID.
+     * Retrieves a list of bookings based on the provided parameters.
      *
      * @param bookingId Optional booking ID to retrieve a specific booking.
+     * @param driverId Optional driver ID to retrieve bookings for a specific driver.
+     * @param customerId Optional customer ID to retrieve bookings for a specific customer.
      * @return List of BookingGetResponse objects containing the booking details.
-     * @throws NotFoundException if the booking is not found.
+     * @throws NotFoundException if the booking, driver, or customer is not found.
      */
     @Override
     public List<BookingGetResponse> getBookings(Long bookingId, Long driverId, Long customerId) throws NotFoundException {
