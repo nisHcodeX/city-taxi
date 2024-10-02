@@ -61,4 +61,16 @@ public class BookingController {
     public ResponseEntity<?> updateBooking(@Valid @RequestBody List<BookingUpdateRequest> payload) {
         return new ResponseEntity<>(bookingService.update(payload), HttpStatus.OK);
     }
+
+    /**
+     * Marks the specified bookings as completed.
+     *
+     * @param ids List of booking IDs to be marked as completed.
+     * @return ResponseEntity containing the result of the operation with HTTP status OK.
+     */
+    @PatchMapping("/mark/as/completed")
+    public ResponseEntity<?> markAsCompleted(@RequestParam(value = "ids") List<Long> ids) {
+        return new ResponseEntity<>(bookingService.markAsCompleted(ids), HttpStatus.OK);
+    }
+
 }

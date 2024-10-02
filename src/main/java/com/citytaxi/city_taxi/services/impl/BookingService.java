@@ -196,7 +196,15 @@ public class BookingService implements IBookingService {
         return response;
     }
 
+    /**
+     * Marks the specified bookings as completed.
+     *
+     * @param ids List of booking IDs to be marked as completed.
+     * @return List of BookingGetResponse objects containing the details of the completed bookings.
+     * @throws NotFoundException if any booking with the specified ID is not found.
+     */
     @Override
+    @Transactional
     public List<BookingGetResponse> markAsCompleted(List<Long> ids) {
         final List<BookingGetResponse> response = new ArrayList<>();
 
@@ -210,9 +218,8 @@ public class BookingService implements IBookingService {
             bookingRepository.save(booking);
             log.debug("booking marked as completed");
 
-            final Driver driver = booking.getDriver();
-
             // Update the availability of the driver to available
+            final Driver driver = booking.getDriver();
             driver.setAvailability(EDriverAvailabilityStatus.AVAILABLE);
             driver.setUpdatedAt(OffsetDateTime.now());
             driverRepository.save(driver);

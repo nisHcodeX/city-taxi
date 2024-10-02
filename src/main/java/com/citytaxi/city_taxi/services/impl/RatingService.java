@@ -8,7 +8,6 @@ import com.citytaxi.city_taxi.models.dtos.rating.response.RatingDeleteResponse;
 import com.citytaxi.city_taxi.models.dtos.rating.response.RatingGetResponse;
 import com.citytaxi.city_taxi.models.dtos.rating.response.RatingUpdateResponse;
 import com.citytaxi.city_taxi.models.entities.Booking;
-import com.citytaxi.city_taxi.models.entities.Customer;
 import com.citytaxi.city_taxi.models.entities.Rating;
 import com.citytaxi.city_taxi.repositories.BookingRepository;
 import com.citytaxi.city_taxi.repositories.CustomerRepository;
