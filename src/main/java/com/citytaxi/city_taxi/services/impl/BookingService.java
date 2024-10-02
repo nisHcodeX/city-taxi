@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -225,17 +226,27 @@ public class BookingService implements IBookingService {
     /**
      * Retrieves a list of bookings. If an ID is provided, retrieves the booking with the specified ID.
      *
-     * @param id Optional booking ID to retrieve a specific booking.
+     * @param bookingId Optional booking ID to retrieve a specific booking.
      * @return List of BookingGetResponse objects containing the booking details.
      * @throws NotFoundException if the booking is not found.
      */
     @Override
-    public List<BookingGetResponse> getBookings(Long id) throws NotFoundException {
-        if (id != null) {
-            final Booking booking = bookingRepository.findById(id).orElseThrow(
-                    () -> new NotFoundException(String.format("Booking with ID %d not found", id))
+    public List<BookingGetResponse> getBookings(Long bookingId, Long driverId, Long customerId) throws NotFoundException {
+        if (bookingId != null) {
+            final Booking booking = bookingRepository.findById(bookingId).orElseThrow(
+                    () -> new NotFoundException(String.format("Booking with ID %d not found", bookingId))
             );
             return List.of(generateBookingGetResponse(booking));
+        }
+
+        if (driverId != null) {
+            final List<Booking> bookings = bookingRepository.findByDriverId(driverId);
+            return bookings.stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
+        }
+
+        if (customerId != null) {
+            final List<Booking> bookings = bookingRepository.findByCustomerId(customerId);
+            return bookings.stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
         }
 
         final List<Booking> bookings = bookingRepository.findAll();

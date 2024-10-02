@@ -26,12 +26,15 @@ public class BookingController {
      * @return ResponseEntity containing the list of bookings or the specific booking.
      */
     @GetMapping
-    public ResponseEntity<?> getBookings(@RequestParam(value = "id", required = false) Long id) {
-        final List<BookingGetResponse> bookings = bookingService.getBookings(id);
+    public ResponseEntity<?> getBookings(
+            @RequestParam(value = "id", required = false) Long id,
+            @RequestParam(value = "customerId", required = false) Long customerId,
+            @RequestParam(value = "driverId", required = false) Long driverId) {
+        final List<BookingGetResponse> bookings = bookingService.getBookings(id, driverId, customerId);
         if (bookings.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(bookingService.getBookings(id));
+        return ResponseEntity.ok(bookings);
     }
 
     /**

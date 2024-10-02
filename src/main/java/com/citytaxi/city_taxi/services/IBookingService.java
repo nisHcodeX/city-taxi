@@ -12,5 +12,5 @@ public interface IBookingService {
     List<BookingCreateResponse> create(List<BookingCreateRequest> payload);
     List<BookingUpdateResponse> update(List<BookingUpdateRequest> payload);
     List<BookingGetResponse> markAsCompleted(List<Long> ids);
-    List<BookingGetResponse> getBookings(Long id);
+    List<BookingGetResponse> getBookings(Long bookingId, Long driverId, Long customerId);
 }
