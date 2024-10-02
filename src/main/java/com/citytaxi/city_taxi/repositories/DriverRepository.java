@@ -20,7 +20,7 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     boolean existsByDriverLicense(Long id, String driverLicense);
     @Query("SELECT new com.citytaxi.city_taxi.models.dtos.driver.response.DriverGetResponse(d.id, d.name, d.email, d.phoneNumber, d.driverLicense, d.availability, d.latitude, d.longitude, d.locationName, d.createdAt, d.updatedAt) FROM Driver d")
     List<DriverGetResponse> findAllDrivers();
-    @Query("SELECT d FROM Driver d WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(d.latitude)) * cos(radians(d.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(d.latitude)))) < :radius AND d.availability = 'AVAILABLE'")
+    @Query("SELECT d FROM Driver d WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(d.latitude)) * cos(radians(d.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(d.latitude)))) < :radius AND d.availability = 'AVAILABLE' AND d.vehicles.size > 0")
     List<Driver> findNearbyDrivers(@Param("lat") double lat, @Param("lng") double lng, @Param("radius") double radius);
 
 }
