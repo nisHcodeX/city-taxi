@@ -40,7 +40,7 @@ public class PaymentController {
      * @return ResponseEntity containing a list of PaymentCreateResponse objects with the created payments.
      */
     @PostMapping
-    public ResponseEntity<?> updateAccount(@Valid @RequestBody List<PaymentCreateRequest> payload) {
+    public ResponseEntity<?> addPayment(@Valid @RequestBody List<PaymentCreateRequest> payload) {
         return new ResponseEntity<>(paymentService.create(payload), HttpStatus.OK);
     }
 }

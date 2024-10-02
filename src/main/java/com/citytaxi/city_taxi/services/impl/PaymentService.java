@@ -6,6 +6,7 @@ import com.citytaxi.city_taxi.models.dtos.payment.response.PaymentCreateResponse
 import com.citytaxi.city_taxi.models.dtos.payment.response.PaymentGetResponse;
 import com.citytaxi.city_taxi.models.entities.Booking;
 import com.citytaxi.city_taxi.models.entities.Payment;
+import com.citytaxi.city_taxi.models.enums.EBookingStatus;
 import com.citytaxi.city_taxi.models.enums.EPaymentType;
 import com.citytaxi.city_taxi.repositories.BookingRepository;
 import com.citytaxi.city_taxi.repositories.PaymentRepository;
@@ -52,6 +53,10 @@ public class PaymentService implements IPaymentService {
 
             paymentRepository.save(payment);
             log.debug("payment created");
+
+            // Mark the booking as paid
+            booking.setStatus(EBookingStatus.PAID);
+            bookingRepository.save(booking);
 
             response.add(PaymentCreateResponse.builder()
                     .id(payment.getId())

@@ -1,5 +1,6 @@
 package com.citytaxi.city_taxi.services.impl;
 
+import com.citytaxi.city_taxi.exceptions.BadRequestException;
 import com.citytaxi.city_taxi.exceptions.NotFoundException;
 import com.citytaxi.city_taxi.models.dtos.booking.request.BookingCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.booking.request.BookingUpdateRequest;
@@ -57,6 +58,15 @@ public class BookingService implements IBookingService {
             final Customer customer = customerRepository.findById(request.getCustomerId()).orElseThrow(
                     () -> new NotFoundException(String.format("Customer with id %s not found", request.getCustomerId())
             ));
+
+            // Make sure customer does not have ongoing bookings or unpaid bookings
+            if (bookingRepository.doesCustomerHaveActiveBookings(customer.getId())) {
+                throw new BadRequestException("Cannot book the ride since there is an active booking");
+            }
+
+            if (bookingRepository.doesCustomerHaveUnpaidBooking(customer.getId())) {
+                throw new BadRequestException("Cannot book the ride since there is an unpaid booking");
+            }
 
             final Driver driver = driverRepository.findById(request.getDriverId()).orElseThrow(
                     () -> new NotFoundException(String.format("Driver with id %s not found", request.getDriverId())
