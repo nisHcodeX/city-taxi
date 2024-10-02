@@ -5,12 +5,15 @@ import com.citytaxi.city_taxi.models.dtos.payment.request.PaymentCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.payment.response.PaymentCreateResponse;
 import com.citytaxi.city_taxi.models.dtos.payment.response.PaymentGetResponse;
 import com.citytaxi.city_taxi.models.entities.Booking;
+import com.citytaxi.city_taxi.models.entities.Customer;
+import com.citytaxi.city_taxi.models.entities.Driver;
 import com.citytaxi.city_taxi.models.entities.Payment;
 import com.citytaxi.city_taxi.models.enums.EBookingStatus;
 import com.citytaxi.city_taxi.models.enums.EPaymentType;
 import com.citytaxi.city_taxi.repositories.BookingRepository;
 import com.citytaxi.city_taxi.repositories.PaymentRepository;
 import com.citytaxi.city_taxi.services.IPaymentService;
+import com.citytaxi.city_taxi.util.sms.SMSService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ import java.util.List;
 public class PaymentService implements IPaymentService {
     private final PaymentRepository paymentRepository;
     private final BookingRepository bookingRepository;
+    private final SMSService smsService;
 
     /**
      * Creates new payments based on the provided payload.
@@ -57,6 +61,12 @@ public class PaymentService implements IPaymentService {
             // Mark the booking as paid
             booking.setStatus(EBookingStatus.PAID);
             bookingRepository.save(booking);
+
+            // Send SMS to driver's mobile number
+            final Driver driver = booking.getDriver();
+            final Customer customer = booking.getCustomer();
+            final String message = String.format("Booking with id %s has been paid. Passenger name: %s", booking.getId(), customer.getName());
+            smsService.sendSMS(driver.getPhoneNumber(), message);
 
             response.add(PaymentCreateResponse.builder()
                     .id(payment.getId())
