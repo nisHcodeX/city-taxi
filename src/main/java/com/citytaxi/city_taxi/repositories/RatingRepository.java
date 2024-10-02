@@ -15,6 +15,12 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("SELECT new com.citytaxi.city_taxi.models.dtos.rating.response.RatingGetResponse(r.id, r.rating, r.createdAt, r.updatedAt) FROM Rating r WHERE r.booking.id = :bookingId")
     List<RatingGetResponse> findAllByBookingId(Long bookingId);
 
+    @Query("SELECT new com.citytaxi.city_taxi.models.dtos.rating.response.RatingGetResponse(r.id, r.rating, r.createdAt, r.updatedAt) " +
+            "FROM Rating r " +
+            "INNER JOIN Booking b ON r.booking.id = b.id " +
+            "WHERE b.driver.id = :driverId")
+    List<RatingGetResponse> findAllByDriverId(Long driverId);
+
     @Query("SELECT new com.citytaxi.city_taxi.models.dtos.rating.response.RatingGetResponse(r.id, r.rating, r.createdAt, r.updatedAt) FROM Rating r")
     List<RatingGetResponse> finalAllRatings();
 }

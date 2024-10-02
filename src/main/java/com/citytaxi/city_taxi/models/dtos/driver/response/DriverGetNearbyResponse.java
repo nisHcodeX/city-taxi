@@ -19,6 +19,7 @@ public class DriverGetNearbyResponse {
     private String email;
     private String phoneNumber;
     private String driverLicense;
+    private Integer avgRating;
     private EDriverAvailabilityStatus availability;
     private Double latitude;
     private Double longitude;

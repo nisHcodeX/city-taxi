@@ -6,6 +6,7 @@ import com.citytaxi.city_taxi.models.dtos.driver.request.DriverCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.driver.request.DriverUpdateRequest;
 import com.citytaxi.city_taxi.models.dtos.driver.response.*;
 import com.citytaxi.city_taxi.models.dtos.email.SendRegistrationEmailRequest;
+import com.citytaxi.city_taxi.models.dtos.rating.response.RatingGetResponse;
 import com.citytaxi.city_taxi.models.dtos.vehicle.response.VehicleGetResponse;
 import com.citytaxi.city_taxi.models.dtos.vehicle_type.response.VehicleTypeGetResponse;
 import com.citytaxi.city_taxi.models.entities.Account;
@@ -17,6 +18,7 @@ import com.citytaxi.city_taxi.models.enums.EAccountType;
 import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import com.citytaxi.city_taxi.repositories.AccountRepository;
 import com.citytaxi.city_taxi.repositories.DriverRepository;
+import com.citytaxi.city_taxi.repositories.RatingRepository;
 import com.citytaxi.city_taxi.services.IDriverService;
 import com.citytaxi.city_taxi.util.PasswordGenerator;
 import lombok.AllArgsConstructor;
@@ -35,6 +37,7 @@ import java.util.concurrent.BlockingQueue;
 public class DriverService implements IDriverService {
     private final AccountRepository accountRepository;
     private final DriverRepository driverRepository;
+    private final RatingRepository ratingRepository;
     private final BlockingQueue<SendRegistrationEmailRequest> emailQueue;
     private final PasswordGenerator passwordGenerator;
 
@@ -219,22 +222,15 @@ public class DriverService implements IDriverService {
             Driver driver = driverRepository.findById(id).orElseThrow(
                     () -> new NotFoundException(String.format("Driver with ID %d not found", id))
             );
-
-            return List.of(DriverGetResponse.builder()
-                .id(driver.getId())
-                .name(driver.getName())
-                .email(driver.getEmail())
-                .phoneNumber(driver.getPhoneNumber())
-                .driverLicense(driver.getDriverLicense())
-                .availability(driver.getAvailability())
-                .latitude(driver.getLatitude())
-                .longitude(driver.getLongitude())
-                .locationName(driver.getLocationName())
-                .createdAt(driver.getCreatedAt())
-                .updatedAt(driver.getUpdatedAt())
-                .build());
+            return List.of(generateDriverGetResponse(driver));
         }
-        return driverRepository.findAllDrivers();
+
+        List<DriverGetResponse> response = new ArrayList<>();
+        List<Driver> drivers = driverRepository.findAll();
+        for (Driver driver : drivers) {
+            response.add(generateDriverGetResponse(driver));
+        }
+        return response;
     }
 
     /**
@@ -319,10 +315,12 @@ public class DriverService implements IDriverService {
         final List<DriverGetNearbyResponse> response = new ArrayList<>();
         Vehicle vehicle;
         VehicleType vehicleType;
+        List<RatingGetResponse> ratings;
 
         for (Driver driver : drivers) {
             vehicle = driver.getVehicles().get(0);
             vehicleType = vehicle.getVehicleType();
+            ratings = ratingRepository.findAllByDriverId(driver.getId());
 
             response.add(DriverGetNearbyResponse.builder()
                 .id(driver.getId())
@@ -330,6 +328,7 @@ public class DriverService implements IDriverService {
                 .email(driver.getEmail())
                 .phoneNumber(driver.getPhoneNumber())
                 .driverLicense(driver.getDriverLicense())
+                .avgRating(calculateAverageRating(ratings.stream().map(RatingGetResponse::getRating).toList()))
                 .availability(driver.getAvailability())
                 .latitude(driver.getLatitude())
                 .longitude(driver.getLongitude())
@@ -356,5 +355,43 @@ public class DriverService implements IDriverService {
                 .build());
         }
         return response;
+    }
+
+    /**
+     * Generates a response object containing driver details.
+     *
+     * @param driver The driver entity for which the response is generated.
+     * @return A DriverGetResponse object containing the driver's details.
+     */
+    private DriverGetResponse generateDriverGetResponse(Driver driver) {
+        List<RatingGetResponse> ratings = ratingRepository.findAllByDriverId(driver.getId());
+        return DriverGetResponse.builder()
+            .id(driver.getId())
+            .name(driver.getName())
+            .email(driver.getEmail())
+            .phoneNumber(driver.getPhoneNumber())
+            .driverLicense(driver.getDriverLicense())
+            .avgRating(calculateAverageRating(ratings.stream().map(RatingGetResponse::getRating).toList()))
+            .availability(driver.getAvailability())
+            .latitude(driver.getLatitude())
+            .longitude(driver.getLongitude())
+            .locationName(driver.getLocationName())
+            .createdAt(driver.getCreatedAt())
+            .updatedAt(driver.getUpdatedAt())
+            .build();
+    }
+
+    /**
+     * Calculates the average rating from a list of ratings.
+     *
+     * @param ratings A list of integer ratings.
+     * @return The average rating, clamped between 1 and 5.
+     */
+    private Integer calculateAverageRating(List<Integer> ratings) {
+        int sum = 0;
+        for (Integer rating : ratings) {
+            sum += rating;
+        }
+        return Math.max(1, Math.min((sum / ratings.size()), 5));
     }
 }
