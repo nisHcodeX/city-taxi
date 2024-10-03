@@ -1,5 +1,6 @@
 package com.citytaxi.city_taxi.models.dtos.driver.response;
 
+import com.citytaxi.city_taxi.models.dtos.vehicle.response.VehicleGetResponse;
 import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Builder
 @Getter
@@ -23,6 +25,7 @@ public class DriverGetResponse {
     private Double latitude;
     private Double longitude;
     private String locationName;
+    private List<VehicleGetResponse> vehicles;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }

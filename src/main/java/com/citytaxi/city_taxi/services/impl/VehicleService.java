@@ -79,7 +79,9 @@ public class VehicleService implements IVehicleService {
             vehicleRepository.save(vehicle);
             log.debug("vehicle created");
 
-            driver.setVehicles(new ArrayList<>(List.of(vehicle)));
+            final List<Vehicle> driverVehicles = driver.getVehicles();
+            driverVehicles.add(vehicle);
+            driver.setVehicles(driverVehicles);
             driverRepository.save(driver);
             log.debug("Vehicle assigned to driver");
 

@@ -19,6 +19,7 @@ import com.citytaxi.city_taxi.models.enums.EDriverAvailabilityStatus;
 import com.citytaxi.city_taxi.repositories.AccountRepository;
 import com.citytaxi.city_taxi.repositories.DriverRepository;
 import com.citytaxi.city_taxi.repositories.RatingRepository;
+import com.citytaxi.city_taxi.repositories.VehicleRepository;
 import com.citytaxi.city_taxi.services.IDriverService;
 import com.citytaxi.city_taxi.util.PasswordGenerator;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ import java.util.concurrent.BlockingQueue;
 @Log4j2
 @AllArgsConstructor
 public class DriverService implements IDriverService {
+    private final VehicleRepository vehicleRepository;
     private final AccountRepository accountRepository;
     private final DriverRepository driverRepository;
     private final RatingRepository ratingRepository;
@@ -365,6 +367,32 @@ public class DriverService implements IDriverService {
      */
     private DriverGetResponse generateDriverGetResponse(Driver driver) {
         List<RatingGetResponse> ratings = ratingRepository.findAllByDriverId(driver.getId());
+        List<Vehicle> vehicles = vehicleRepository.findAllByDriverId(driver.getId());
+
+        List<VehicleGetResponse> vehicleGetResponses = new ArrayList<>();
+        VehicleType vehicleType = null;
+        for (Vehicle vehicle : vehicles) {
+            vehicleType = vehicle.getVehicleType();
+
+            vehicleGetResponses.add(VehicleGetResponse.builder()
+                    .id(vehicle.getId())
+                            .manufacturer(vehicle.getManufacturer())
+                            .model(vehicle.getModel())
+                            .colour(vehicle.getColour())
+                            .licensePlate(vehicle.getLicensePlate())
+                            .vehicleType(vehicleType != null ? VehicleTypeGetResponse.builder()
+                                    .id(vehicleType.getId())
+                                    .name(vehicleType.getName())
+                                    .pricePerMeter(vehicleType.getPricePerMeter())
+                                    .seatCount(vehicleType.getSeatCount())
+                                    .createdAt(vehicleType.getCreatedAt())
+                                    .updatedAt(vehicleType.getUpdatedAt())
+                                    .build() : null)
+                            .createdAt(vehicle.getCreatedAt())
+                            .updatedAt(vehicle.getUpdatedAt())
+                    .build());
+        }
+
         return DriverGetResponse.builder()
             .id(driver.getId())
             .name(driver.getName())
@@ -376,6 +404,7 @@ public class DriverService implements IDriverService {
             .latitude(driver.getLatitude())
             .longitude(driver.getLongitude())
             .locationName(driver.getLocationName())
+            .vehicles(vehicleGetResponses)
             .createdAt(driver.getCreatedAt())
             .updatedAt(driver.getUpdatedAt())
             .build();
