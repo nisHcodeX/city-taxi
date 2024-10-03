@@ -388,6 +388,10 @@ public class DriverService implements IDriverService {
      * @return The average rating, clamped between 1 and 5.
      */
     private Integer calculateAverageRating(List<Integer> ratings) {
+        if (ratings.isEmpty()) {
+            return 0;
+        }
+
         int sum = 0;
         for (Integer rating : ratings) {
             sum += rating;
