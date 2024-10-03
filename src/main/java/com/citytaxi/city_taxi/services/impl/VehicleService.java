@@ -211,7 +211,7 @@ public class VehicleService implements IVehicleService {
      * @throws NotFoundException if a vehicle with the specified ID is not found.
      */
     @Override
-    public List<VehicleGetResponse> getVehicles(Long id) throws NotFoundException {
+    public List<VehicleGetResponse> getVehicles(Long id, Long driverId) throws NotFoundException {
         final List<VehicleGetResponse> responses = new ArrayList<>();
 
         if (id != null) {
@@ -219,45 +219,41 @@ public class VehicleService implements IVehicleService {
                     () -> new NotFoundException(String.format("Vehicle with ID %d not found", id))
             );
 
-            return List.of(VehicleGetResponse.builder()
-                    .id(vehicle.getId())
-                    .manufacturer(vehicle.getManufacturer())
-                    .model(vehicle.getModel())
-                    .colour(vehicle.getColour())
-                    .licensePlate(vehicle.getLicensePlate())
-                    .vehicleType(VehicleTypeGetResponse.builder()
-                            .id(vehicle.getVehicleType().getId())
-                            .name(vehicle.getVehicleType().getName())
-                            .pricePerMeter(vehicle.getVehicleType().getPricePerMeter())
-                            .seatCount(vehicle.getVehicleType().getSeatCount())
-                            .createdAt(vehicle.getVehicleType().getCreatedAt())
-                            .updatedAt(vehicle.getVehicleType().getUpdatedAt())
-                            .build())
-                    .createdAt(vehicle.getCreatedAt())
-                    .updatedAt(vehicle.getUpdatedAt())
-                    .build());
+            return List.of(generateVehicleGetResponse(vehicle));
+        }
+
+        if (driverId != null) {
+            final List<Vehicle> vehicles = vehicleRepository.findAllByDriverId(driverId);
+            for (Vehicle vehicle : vehicles) {
+                responses.add(generateVehicleGetResponse(vehicle));
+            }
+            return responses;
         }
 
         final List<Vehicle> vehicles = vehicleRepository.findAll();
         for (Vehicle vehicle : vehicles) {
-            responses.add(VehicleGetResponse.builder()
-                    .id(vehicle.getId())
-                    .manufacturer(vehicle.getManufacturer())
-                    .model(vehicle.getModel())
-                    .colour(vehicle.getColour())
-                    .licensePlate(vehicle.getLicensePlate())
-                    .vehicleType(VehicleTypeGetResponse.builder()
-                            .id(vehicle.getVehicleType().getId())
-                            .name(vehicle.getVehicleType().getName())
-                            .pricePerMeter(vehicle.getVehicleType().getPricePerMeter())
-                            .seatCount(vehicle.getVehicleType().getSeatCount())
-                            .createdAt(vehicle.getVehicleType().getCreatedAt())
-                            .updatedAt(vehicle.getVehicleType().getUpdatedAt())
-                            .build())
-                    .createdAt(vehicle.getCreatedAt())
-                    .updatedAt(vehicle.getUpdatedAt())
-                    .build());
+            responses.add(generateVehicleGetResponse(vehicle));
         }
         return responses;
+    }
+
+    private VehicleGetResponse generateVehicleGetResponse(Vehicle vehicle) {
+        return VehicleGetResponse.builder()
+                .id(vehicle.getId())
+                .manufacturer(vehicle.getManufacturer())
+                .model(vehicle.getModel())
+                .colour(vehicle.getColour())
+                .licensePlate(vehicle.getLicensePlate())
+                .vehicleType(VehicleTypeGetResponse.builder()
+                        .id(vehicle.getVehicleType().getId())
+                        .name(vehicle.getVehicleType().getName())
+                        .pricePerMeter(vehicle.getVehicleType().getPricePerMeter())
+                        .seatCount(vehicle.getVehicleType().getSeatCount())
+                        .createdAt(vehicle.getVehicleType().getCreatedAt())
+                        .updatedAt(vehicle.getVehicleType().getUpdatedAt())
+                        .build())
+                .createdAt(vehicle.getCreatedAt())
+                .updatedAt(vehicle.getUpdatedAt())
+                .build();
     }
 }

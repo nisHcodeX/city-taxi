@@ -13,5 +13,5 @@ public interface IVehicleService {
     List<VehicleCreateResponse> create(List<VehicleCreateRequest> payload);
     List<VehicleUpdateResponse> update(List<VehicleUpdateRequest> payload);
     List<VehicleDeleteResponse> delete(List<Long> ids);
-    List<VehicleGetResponse> getVehicles(Long id);
+    List<VehicleGetResponse> getVehicles(Long id, Long driverId);
 }

@@ -26,8 +26,11 @@ public class VehicleController {
      * @return ResponseEntity containing the list of VehicleGetResponse objects or NO_CONTENT status if no vehicles are found.
      */
     @GetMapping
-    public ResponseEntity<?> getVehicles(@RequestParam(value = "id", required = false) Long id) {
-        final List<VehicleGetResponse> vehicles = vehicleService.getVehicles(id);
+    public ResponseEntity<?> getVehicles(
+            @RequestParam(value = "id", required = false) Long id,
+            @RequestParam(value = "driverid", required = false) Long driverId
+    ) {
+        final List<VehicleGetResponse> vehicles = vehicleService.getVehicles(id, driverId);
 
         if (vehicles.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

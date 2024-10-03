@@ -24,6 +24,9 @@ public class Vehicle {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicle_type_id", referencedColumnName = "id")
     private VehicleType vehicleType;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "driver_id", referencedColumnName = "id")
+    private Driver driver;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }
