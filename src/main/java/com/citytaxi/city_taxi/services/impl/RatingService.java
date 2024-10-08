@@ -9,6 +9,7 @@ import com.citytaxi.city_taxi.models.dtos.rating.response.RatingGetResponse;
 import com.citytaxi.city_taxi.models.dtos.rating.response.RatingUpdateResponse;
 import com.citytaxi.city_taxi.models.entities.Booking;
 import com.citytaxi.city_taxi.models.entities.Rating;
+import com.citytaxi.city_taxi.models.enums.EBookingStatus;
 import com.citytaxi.city_taxi.repositories.BookingRepository;
 import com.citytaxi.city_taxi.repositories.CustomerRepository;
 import com.citytaxi.city_taxi.repositories.DriverRepository;
@@ -58,6 +59,10 @@ public class RatingService implements IRatingService {
 
             ratingRepository.save(rating);
             log.debug("rating created");
+
+            // Mark the booking as done after the review was added
+            booking.setStatus(EBookingStatus.DONE);
+            bookingRepository.save(booking);
 
             response.add(RatingCreateResponse.builder()
                     .id(rating.getId())

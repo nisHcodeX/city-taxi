@@ -97,8 +97,8 @@ public class BookingService implements IBookingService {
             log.debug("booking created");
 
             // Send SMS to customer phone number...
-//            final String bookingDetails = smsService.generateBookingDetailsForSMS(booking);
-//            smsService.sendSMS(customer.getPhoneNumber(), bookingDetails);
+            final String bookingDetails = smsService.generateBookingDetailsForSMS(booking);
+            smsService.sendSMS(customer.getPhoneNumber(), bookingDetails);
 
             // Update the availability of the driver to busy
             driver.setAvailability(EDriverAvailabilityStatus.BUSY);
@@ -306,6 +306,10 @@ public class BookingService implements IBookingService {
                         .name(driver.getName())
                         .email(driver.getEmail())
                         .phoneNumber(driver.getPhoneNumber())
+                        .latitude(driver.getLatitude())
+                        .longitude(driver.getLongitude())
+                        .locationName(driver.getLocationName())
+                        .availability(driver.getAvailability())
                         .driverLicense(driver.getDriverLicense())
                         .createdAt(driver.getCreatedAt())
                         .updatedAt(driver.getUpdatedAt())

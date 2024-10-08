@@ -21,8 +21,15 @@ import org.springframework.stereotype.Service;
 public class SMSService {
     @Value("${twilio.phone_number}")
     private String fromPhoneNumber;
+    @Value("${twilio.enabled}")
+    private boolean enabled;
 
     public void sendSMS(String toPhoneNumber, String payload) {
+        if (!enabled) {
+            log.debug("sms sending is disabled...");
+            return;
+        }
+
         try {
             Message.creator(
                     new PhoneNumber(toPhoneNumber),
