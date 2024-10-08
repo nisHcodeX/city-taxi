@@ -3,6 +3,7 @@ package com.citytaxi.city_taxi.controllers;
 import com.citytaxi.city_taxi.models.dtos.booking.request.BookingCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.booking.request.BookingUpdateRequest;
 import com.citytaxi.city_taxi.models.dtos.booking.response.BookingGetResponse;
+import com.citytaxi.city_taxi.models.enums.EBookingStatus;
 import com.citytaxi.city_taxi.services.IBookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,9 @@ public class BookingController {
     public ResponseEntity<?> getBookings(
             @RequestParam(value = "id", required = false) Long id,
             @RequestParam(value = "customerId", required = false) Long customerId,
-            @RequestParam(value = "driverId", required = false) Long driverId) {
-        final List<BookingGetResponse> bookings = bookingService.getBookings(id, driverId, customerId);
+            @RequestParam(value = "driverId", required = false) Long driverId,
+            @RequestParam(value = "status", required = false) EBookingStatus status) {
+        final List<BookingGetResponse> bookings = bookingService.getBookings(id, driverId, customerId, status);
         if (bookings.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

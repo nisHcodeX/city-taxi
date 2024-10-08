@@ -97,8 +97,8 @@ public class BookingService implements IBookingService {
             log.debug("booking created");
 
             // Send SMS to customer phone number...
-            final String bookingDetails = smsService.generateBookingDetailsForSMS(booking);
-            smsService.sendSMS(customer.getPhoneNumber(), bookingDetails);
+//            final String bookingDetails = smsService.generateBookingDetailsForSMS(booking);
+//            smsService.sendSMS(customer.getPhoneNumber(), bookingDetails);
 
             // Update the availability of the driver to busy
             driver.setAvailability(EDriverAvailabilityStatus.BUSY);
@@ -240,7 +240,7 @@ public class BookingService implements IBookingService {
         return response;
     }
 
-
+    // TODO: add activeFlag and historyFlag
     /**
      * Retrieves a list of bookings based on the provided parameters.
      *
@@ -251,7 +251,7 @@ public class BookingService implements IBookingService {
      * @throws NotFoundException if the booking, driver, or customer is not found.
      */
     @Override
-    public List<BookingGetResponse> getBookings(Long bookingId, Long driverId, Long customerId) throws NotFoundException {
+    public List<BookingGetResponse> getBookings(Long bookingId, Long driverId, Long customerId, EBookingStatus status) throws NotFoundException {
         if (bookingId != null) {
             final Booking booking = bookingRepository.findById(bookingId).orElseThrow(
                     () -> new NotFoundException(String.format("Booking with ID %d not found", bookingId))
@@ -260,12 +260,19 @@ public class BookingService implements IBookingService {
         }
 
         if (driverId != null) {
+            if (status != null) {
+                return bookingRepository.findByDriverIdAndStatusOrderByCreatedAt(driverId, status).stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
+            }
+
             final List<Booking> bookings = bookingRepository.findByDriverId(driverId);
             return bookings.stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
         }
 
         if (customerId != null) {
-            final List<Booking> bookings = bookingRepository.findByCustomerId(customerId);
+            if (status != null) {
+                return bookingRepository.findByCustomerIdAndStatusOrderByCreatedAt(customerId, status).stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
+            }
+            final List<Booking> bookings = bookingRepository.findByCustomerIdOrderByCreatedAt(customerId);
             return bookings.stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
         }
 

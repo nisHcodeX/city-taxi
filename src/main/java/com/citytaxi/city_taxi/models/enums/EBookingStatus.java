@@ -4,5 +4,6 @@ public enum EBookingStatus {
     ACTIVE,
     COMPLETED,
     CANCELLED,
-    PAID
+    PAID,
+    DONE
 }

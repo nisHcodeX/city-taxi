@@ -62,11 +62,11 @@ public class PaymentService implements IPaymentService {
             booking.setStatus(EBookingStatus.PAID);
             bookingRepository.save(booking);
 
-            // Send SMS to driver's mobile number
-            final Driver driver = booking.getDriver();
-            final Customer customer = booking.getCustomer();
-            final String message = String.format("Booking with id %s has been paid. Passenger name: %s", booking.getId(), customer.getName());
-            smsService.sendSMS(driver.getPhoneNumber(), message);
+//            // Send SMS to driver's mobile number
+//            final Driver driver = booking.getDriver();
+//            final Customer customer = booking.getCustomer();
+//            final String message = String.format("Booking with id %s has been paid. Passenger name: %s", booking.getId(), customer.getName());
+//            smsService.sendSMS(driver.getPhoneNumber(), message);
 
             response.add(PaymentCreateResponse.builder()
                     .id(payment.getId())
