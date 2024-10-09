@@ -1,9 +1,9 @@
 package com.citytaxi.city_taxi.controllers;
 
+import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerCreateRequest;
 import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerRegistrationRequest;
 import com.citytaxi.city_taxi.models.dtos.customer.request.CustomerUpdateRequest;
 import com.citytaxi.city_taxi.models.dtos.customer.response.CustomerGetResponse;
-import com.citytaxi.city_taxi.services.IAccountService;
 import com.citytaxi.city_taxi.services.ICustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +35,12 @@ public class CustomerController {
         }
         return ResponseEntity.ok(customers);
     }
+
+    @PostMapping
+    public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerCreateRequest payload) {
+        return new ResponseEntity<>(customerService.create(List.of(payload)), HttpStatus.CREATED);
+    }
+
 
     /**
      * Registers a new customer based on the provided payload.

@@ -26,7 +26,7 @@ public class BookingDetailsSMSResponse {
                 
                 Booking id: %d
                 Estimated cost: %.2f
-                Total distance in Km: %.2f (%.2f meters)
+                Total distance in Km: %.2f
                 
                 Driver name: %s
                 Driver phoneNumber: %s
@@ -37,7 +37,6 @@ public class BookingDetailsSMSResponse {
                 """,
                 id,
                 estimatedCost,
-                distanceInMeters / 1000,
                 distanceInMeters,
                 driver.getName(),
                 driver.getPhoneNumber(),

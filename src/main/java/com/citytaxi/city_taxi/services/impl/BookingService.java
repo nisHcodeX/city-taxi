@@ -75,10 +75,10 @@ public class BookingService implements IBookingService {
             final Vehicle vehicle = driver.getVehicles().get(0);
             final VehicleType vehicleType = vehicle.getVehicleType();
 
-            final double distance = distanceCalculator.calculateDistance(request.getStartLatitude(), request.getStartLongitude(), request.getDestLatitude(), request.getDestLongitude());
-            log.debug("calculated distance = {} meters", distance);
+            final double distanceKm = distanceCalculator.calculateDistance(request.getStartLatitude(), request.getStartLongitude(), request.getDestLatitude(), request.getDestLongitude());
+            log.debug("calculated distance = {} km", distanceKm);
 
-            final double estimatedCost = costGenerator.generateCost(distance, vehicleType);
+            final double estimatedCost = costGenerator.generateCost(distanceKm, vehicleType);
             log.debug("calculated cost = {}", estimatedCost);
 
             Booking booking = Booking.builder()
@@ -87,9 +87,10 @@ public class BookingService implements IBookingService {
                     .startLongitude(request.getStartLongitude())
                     .destLatitude(request.getDestLatitude())
                     .destLongitude(request.getDestLongitude())
-                    .distanceInMeters(distance)
+                    .distanceInMeters(distanceKm)
                     .status(EBookingStatus.ACTIVE)
                     .customer(customer)
+                    .createdAt(OffsetDateTime.now())
                     .driver(driver)
                     .build();
 
@@ -107,7 +108,7 @@ public class BookingService implements IBookingService {
             response.add(BookingCreateResponse.builder()
                     .id(booking.getId())
                     .estimatedCost(booking.getEstimatedCost())
-                    .distanceInMeters(distance)
+                    .distanceInMeters(distanceKm)
                     .status(booking.getStatus())
                     .driver(DriverGetResponse.builder()
                             .id(driver.getId())
@@ -240,7 +241,7 @@ public class BookingService implements IBookingService {
         return response;
     }
 
-    // TODO: add activeFlag and historyFlag
+
     /**
      * Retrieves a list of bookings based on the provided parameters.
      *
