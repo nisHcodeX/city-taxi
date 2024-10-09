@@ -261,7 +261,7 @@ public class BookingService implements IBookingService {
 
         if (driverId != null) {
             if (status != null) {
-                return bookingRepository.findByDriverIdAndStatusOrderByCreatedAt(driverId, status).stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
+                return bookingRepository.findByDriverIdAndStatusOrderByCreatedAtDesc(driverId, status).stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
             }
 
             final List<Booking> bookings = bookingRepository.findByDriverId(driverId);
@@ -270,7 +270,7 @@ public class BookingService implements IBookingService {
 
         if (customerId != null) {
             if (status != null) {
-                return bookingRepository.findByCustomerIdAndStatusOrderByCreatedAt(customerId, status).stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
+                return bookingRepository.findByCustomerIdAndStatusOrderByCreatedAtDesc(customerId, status).stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
             }
             final List<Booking> bookings = bookingRepository.findByCustomerIdOrderByCreatedAt(customerId);
             return bookings.stream().map(this::generateBookingGetResponse).collect(Collectors.toList());
