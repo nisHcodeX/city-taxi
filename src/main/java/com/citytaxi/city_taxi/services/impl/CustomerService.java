@@ -104,8 +104,16 @@ public class CustomerService implements ICustomerService {
         final List<CustomerCreateResponse> response = new ArrayList<>();
 
         for (CustomerCreateRequest request : payload) {
-            if (customerRepository.existsByEmailOrPhoneNumber(request.getEmail(), request.getPhoneNumber())) {
-                throw new BadRequestException("Customer with email or phone number already exists");
+            if (request.getPhoneNumber() != null) {
+                if (customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+                    throw new BadRequestException("Customer with phone number already exists");
+                }
+            }
+
+            if (request.getEmail() != null) {
+                if (customerRepository.existsByEmail(request.getEmail())) {
+                    throw new BadRequestException("Customer with email already exists");
+                }
             }
 
             Customer customer = Customer.builder()

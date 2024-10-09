@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     boolean existsByEmailOrPhoneNumber(String email, String phoneNumber);
+    boolean existsByEmail(String email);
+    boolean existsByPhoneNumber(String phoneNumber);
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.id != ?1 AND c.email = ?2")
     boolean existsByEmail(Long id, String email);
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.id != ?1 AND c.phoneNumber = ?2")
